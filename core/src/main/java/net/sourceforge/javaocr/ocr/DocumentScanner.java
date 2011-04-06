@@ -26,12 +26,12 @@ public class DocumentScanner implements ImageScanner {
      * in order for the new (short) row to be merged in with the previous (tall)
      * row to form a single row.
      */
-    protected float shortRowFraction = 0.125f;
+    protected float shortRowFraction = 0.005f;
     /**
      * The minimum fraction of pixels in an area which must be white in order for the area to
      * be considered whitespace when the liberal whitespace policy is in effect.
      */
-    protected float liberalPolicyAreaWhitespaceFraction = 0.95f;
+    protected float liberalPolicyAreaWhitespaceFraction = 0.85f;
     /**
      * The minimum arrayWidth of a space, expressed as a fraction of the arrayHeight of a row of text.
      */
@@ -39,12 +39,12 @@ public class DocumentScanner implements ImageScanner {
     /**
      * The minimum arrayWidth of a character, expressed as a fraction of the arrayHeight of a row of text.
      */
-    protected float minCharWidthAsFractionOfRowHeight = 0.35f;
+    protected float minCharWidthAsFractionOfRowHeight = 0.25f;
     /**
      * The minimum arrayWidth of a character break (a vertical column of whitespace that separates
      * two characters on a row of text), expressed as a fraction of the arrayHeight of a row of text.
      */
-    protected float minCharBreakWidthAsFractionOfRowHeight = 0.05f;
+    protected float minCharBreakWidthAsFractionOfRowHeight = 0.001f;
     /**
      * The white threshold.  Any pixel empty that is greater than or equal to this empty,
      * will be considered to be white space for the purpose of separating rows of text
