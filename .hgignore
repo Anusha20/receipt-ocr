@@ -1,0 +1,26 @@
+syntax: glob
+*.ipr
+*.iws
+*.iml
+*.ncb
+*.suo
+*.vcproj.*.user
+*.o
+.idea
+Makefile
+config.h
+*.log
+*.status
+**/autom4te.cache
+*.*~
+
+syntax: regexp
+^cpu-core.*/[^/\\\.]+$
+target/
+^autom4te.cache/
+^release\.properties
+runner/
+Debug/
+Release/
+.deps/
+.libs/
