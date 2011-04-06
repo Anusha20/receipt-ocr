@@ -6,6 +6,8 @@
 // Please see the accompanying LICENSE.txt for details.
 package net.sourceforge.javaocr.ocrPlugins.mseOCR;
 
+import net.sourceforge.javaocr.ocrPlugins.imgShearer.ImageShearer;
+import net.sourceforge.javaocr.ocrPlugins.receiptFinder.ReceiptFinder;
 import net.sourceforge.javaocr.scanner.DocumentScanner;
 import net.sourceforge.javaocr.scanner.DocumentScannerListenerAdaptor;
 import net.sourceforge.javaocr.scanner.PixelImage;
@@ -15,6 +17,8 @@ import net.sourceforge.javaocr.scanner.accuracy.OCRComp;
 import net.sourceforge.javaocr.scanner.accuracy.OCRIdentification;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.awt.image.WritableRaster;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -116,6 +120,15 @@ public class OCRScanner extends DocumentScannerListenerAdaptor implements Accura
         PixelImage pixelImage = new PixelImage(image);
         pixelImage.toGrayScale(true);
         pixelImage.filter();
+        new ReceiptFinder().findReceipt(documentScanner, pixelImage);
+        pixelImage = new ImageShearer().shearImage(documentScanner, pixelImage);
+
+        BufferedImage newImage = new BufferedImage(pixelImage.width, pixelImage.height, BufferedImage.TYPE_INT_RGB);
+        WritableRaster raster = (WritableRaster) newImage.getData();
+        raster.setPixels(0, 0, pixelImage.width, pixelImage.height, pixelImage.pixels);
+
+        image = newImage;
+
         decodeBuffer.setLength(0);
         firstRow = true;
         documentScanner.scan(pixelImage, this, x1, y1, x2, y2);
