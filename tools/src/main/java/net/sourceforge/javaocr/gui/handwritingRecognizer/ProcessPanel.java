@@ -19,6 +19,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 import net.sourceforge.javaocr.gui.GUIController;
+import net.sourceforge.javaocr.gui.JavaOCRUtil;
 import net.sourceforge.javaocr.gui.OCRDisplay;
 
 /**
@@ -106,7 +107,7 @@ public class ProcessPanel extends JPanel
 
             public void actionPerformed(ActionEvent e)
             {
-                JFileChooser chooser = new JFileChooser();
+                JFileChooser chooser = JavaOCRUtil.getFileChooser();
                 chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 
                 int returnVal = chooser.showOpenDialog(null);

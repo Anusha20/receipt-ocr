@@ -10,11 +10,17 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
+import java.awt.image.WritableRaster;
 import java.io.File;
 import java.io.IOException;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
+
+import net.sourceforge.javaocr.ocrPlugins.imgShearer.ImageShearer;
+import net.sourceforge.javaocr.ocrPlugins.levelsCorrector.LevelsCorrector;
+import net.sourceforge.javaocr.ocrPlugins.receiptFinder.ReceiptFinder;
 import net.sourceforge.javaocr.scanner.DocumentScanner;
 import net.sourceforge.javaocr.scanner.DocumentScannerListenerAdaptor;
 import net.sourceforge.javaocr.scanner.PixelImage;
@@ -40,7 +46,20 @@ public class CharacterTracer extends DocumentScannerListenerAdaptor
             Image img = ImageIO.read(inputImage);
             PixelImage pixelImage = new PixelImage(img);
             pixelImage.toGrayScale(true);
+            new LevelsCorrector().adjustImageLevels(pixelImage);
             pixelImage.filter();
+            new ReceiptFinder().findReceipt(documentScanner, pixelImage);
+            pixelImage = new ImageShearer().shearImage(documentScanner, pixelImage);
+
+            BufferedImage newImage = new BufferedImage(pixelImage.width, pixelImage.height, BufferedImage.TYPE_BYTE_GRAY);
+            WritableRaster raster = (WritableRaster) newImage.getData();
+
+            raster.setPixels(0, 0, pixelImage.width, pixelImage.height, pixelImage.pixels);
+            newImage.setData(raster);
+
+            bfImage = newImage;
+            bfImageGraphics = bfImage.createGraphics();
+
             documentScanner.scan(pixelImage, this, 0, 0, pixelImage.width, pixelImage.height);
         }
         catch (IOException ex)

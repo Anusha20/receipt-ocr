@@ -21,6 +21,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 import net.sourceforge.javaocr.gui.GUIController;
+import net.sourceforge.javaocr.gui.JavaOCRUtil;
 
 /**
  * Provides a panel to save out individual characters as images.
@@ -129,7 +130,7 @@ public class CharacterTracerPanel extends JPanel
 
             public void actionPerformed(ActionEvent e)
             {
-                JFileChooser chooser = new JFileChooser();
+                JFileChooser chooser = JavaOCRUtil.getFileChooser();
                 chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 
                 int returnVal = chooser.showOpenDialog(null);

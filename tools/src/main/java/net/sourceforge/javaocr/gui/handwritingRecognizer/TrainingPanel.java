@@ -21,6 +21,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 import net.sourceforge.javaocr.gui.GUIController;
+import net.sourceforge.javaocr.gui.JavaOCRUtil;
 
 /**
  * Provides a training panel for the handwriting feature.
@@ -137,7 +138,7 @@ public class TrainingPanel extends JPanel
 
             public void actionPerformed(ActionEvent e)
             {
-                JFileChooser chooser = new JFileChooser();
+                JFileChooser chooser = JavaOCRUtil.getFileChooser();
                 chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 
                 int returnVal = chooser.showOpenDialog(null);
