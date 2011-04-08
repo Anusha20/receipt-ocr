@@ -51,8 +51,6 @@ public class TrainingImage extends PixelImage
     public final float bottomWhiteSpaceFraction;
     private int myMaxX;
     private int myMaxY;
-/// private int xShift;
-/// private int yShift;
 
     /**
      * Construct a new <code>TrainingImage</code> object from an array of
@@ -82,8 +80,6 @@ public class TrainingImage extends PixelImage
                 (float) bottomWhiteSpacePixels / (float) rowHeight;
         myMaxX = width - 1;
         myMaxY = height - 1;
-/// xShift = arrayWidth/20;
-/// yShift = arrayHeight/20;
     }
 
     /**
@@ -107,14 +103,12 @@ public class TrainingImage extends PixelImage
         int theirXRange = Math.max((x2 - x1) - 1, 1);
         int theirYRange = Math.max((y2 - y1) - 1, 1);
         int theirNPix = (theirXRange + 1) * (theirYRange + 1);
-        boolean firstCompare = true;
         int myX, myY;
         long thisError, totalError;
-        long minError = Long.MAX_VALUE;
+        long minError;
         int myLineIdx, theirIdx;
-///for (int yo = -yShift; yo <= yShift; yo++) {
-/// for (int xo = -xShift; xo <= xShift; xo++) {
         totalError = 0L;
+
         for (int theirY = y1, yScan = 0 /*yo */;
                 theirY < y2; theirY++, yScan++)
         {
@@ -136,13 +130,8 @@ public class TrainingImage extends PixelImage
                 totalError += (thisError * thisError);
             }
         }
-        if ((firstCompare) || (totalError < minError))
-        {
-            minError = totalError;
-        }
-        firstCompare = false;
-/// }
-///}
+        minError = totalError;
+
         return Math.sqrt((double) minError) / (double) theirNPix;
     }
     private static final Logger LOG = Logger.getLogger(TrainingImage.class.getName());

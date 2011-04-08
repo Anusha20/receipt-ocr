@@ -49,5 +49,4 @@ public class TrainingImageSpec
     {
         this.fileLocation = fileLocation;
     }
-    private static final Logger LOG = Logger.getLogger(TrainingImageSpec.class.getName());
 }

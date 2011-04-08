@@ -5,40 +5,32 @@
 // Please see the accompanying LICENSE.txt for details.
 package net.sourceforge.javaocr.gui.meanSquareOCR;
 
-import java.awt.FlowLayout;
+import net.sourceforge.javaocr.gui.JavaOCRUtil;
+import net.sourceforge.javaocr.ocrPlugins.mseOCR.CharacterRange;
+
+import javax.swing.*;
+import javax.swing.border.TitledBorder;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.logging.Logger;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JFileChooser;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.border.TitledBorder;
-
-import net.sourceforge.javaocr.gui.JavaOCRUtil;
-import net.sourceforge.javaocr.ocrPlugins.mseOCR.CharacterRange;
 
 /**
  * Provides a panel to input training images.
+ *
  * @author William Whitney
  */
-public class TrainingImageSelector extends JPanel
-{
+public class TrainingImageSelector extends JPanel {
 
     public static final long serialVersionUID = 0;
     private JPanel trainingPanel;
-    private JPanel targetPanel;
     private JTextField targetImage;
     private ArrayList<JTextField> trainingImageLocs;
     private final ArrayList<JTextField> startCharVals;
     private final ArrayList<JTextField> endCharVals;
-   
-    public TrainingImageSelector()
-    {
+
+    public TrainingImageSelector() {
         //Setup view
         trainingImageLocs = new ArrayList<JTextField>();
         startCharVals = new ArrayList<JTextField>();
@@ -46,8 +38,7 @@ public class TrainingImageSelector extends JPanel
         setupPanel();
     }
 
-    public void addTrainingImage()
-    {
+    public void addTrainingImage() {
         JPanel panel = new JPanel();
         panel.setBorder(new TitledBorder("Training Image"));
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
@@ -91,11 +82,9 @@ public class TrainingImageSelector extends JPanel
 
     }
 
-    public void removeTraningImage()
-    {
+    public void removeTraningImage() {
         int compCount = trainingPanel.getComponentCount();
-        if (compCount > 1)
-        {
+        if (compCount > 1) {
             this.trainingPanel.remove(trainingPanel.getComponentCount() - 1);
             trainingImageLocs.remove(trainingImageLocs.size() - 1);
             startCharVals.remove(startCharVals.size() - 1);
@@ -103,33 +92,26 @@ public class TrainingImageSelector extends JPanel
         }
     }
 
-    public boolean isTraningImagesValid()
-    {
-        for (JTextField imageLoc : trainingImageLocs)
-        {
+    public boolean isTraningImagesValid() {
+        for (JTextField imageLoc : trainingImageLocs) {
             File currFile = new File(imageLoc.getText());
-            if (!currFile.exists())
-            {
+            if (!currFile.exists()) {
                 return false;
             }
         }
 
-        for (JTextField startChar : startCharVals)
-        {
+        for (JTextField startChar : startCharVals) {
             String currStr = startChar.getText();
 
-            if (currStr.length() != 1)
-            {
+            if (currStr.length() != 1) {
                 return false;
             }
         }
 
-        for (JTextField startChar : endCharVals)
-        {
+        for (JTextField startChar : endCharVals) {
             String currStr = startChar.getText();
 
-            if (currStr.length() != 1)
-            {
+            if (currStr.length() != 1) {
                 return false;
             }
         }
@@ -137,18 +119,15 @@ public class TrainingImageSelector extends JPanel
         return true;
     }
 
-    public boolean isTargetImageValid()
-    {
+    public boolean isTargetImageValid() {
         File currFile = new File(getTargetImageLoc());
         return currFile.exists();
     }
 
-    public ArrayList<TrainingImageSpec> getTrainingImages()
-    {
+    public ArrayList<TrainingImageSpec> getTrainingImages() {
         ArrayList<TrainingImageSpec> images = new ArrayList<TrainingImageSpec>();
 
-        for (int i = 0; i < trainingImageLocs.size(); i++)
-        {
+        for (int i = 0; i < trainingImageLocs.size(); i++) {
             String trainingImageLoc = trainingImageLocs.get(i).getText();
             int startChar = startCharVals.get(i).getText().charAt(0);
             int endChar = endCharVals.get(i).getText().charAt(0);
@@ -163,16 +142,14 @@ public class TrainingImageSelector extends JPanel
         return images;
     }
 
-    public String getTargetImageLoc()
-    {
+    public String getTargetImageLoc() {
         return targetImage.getText();
     }
 
-    private void setupPanel()
-    {
+    private void setupPanel() {
         this.setLayout(new FlowLayout(FlowLayout.RIGHT));
         this.trainingPanel = getTrainingPanel();
-        this.targetPanel = getTargetPanel();
+        JPanel targetPanel = getTargetPanel();
 
         this.add(trainingPanel);
         this.add(targetPanel);
@@ -180,16 +157,14 @@ public class TrainingImageSelector extends JPanel
         addTrainingImage();
     }
 
-    private JPanel getTrainingPanel()
-    {
+    private JPanel getTrainingPanel() {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
         return panel;
     }
 
-    private JPanel getTargetPanel()
-    {
+    private JPanel getTargetPanel() {
         JPanel targPanel = new JPanel();
         targPanel.setBorder(new TitledBorder("Target Image"));
         targPanel.setLayout(new FlowLayout());
@@ -207,42 +182,33 @@ public class TrainingImageSelector extends JPanel
 
     }
 
-    private ActionListener getImageTargetAction()
-    {
-        return new ActionListener()
-        {
+    private ActionListener getImageTargetAction() {
+        return new ActionListener() {
 
-            public void actionPerformed(ActionEvent e)
-            {
+            public void actionPerformed(ActionEvent e) {
                 JFileChooser chooser = JavaOCRUtil.getFileChooser();
                 chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 
                 int returnVal = chooser.showOpenDialog(null);
-                if (returnVal == JFileChooser.APPROVE_OPTION)
-                {
+                if (returnVal == JFileChooser.APPROVE_OPTION) {
                     targetImage.setText(chooser.getSelectedFile().getAbsolutePath());
                 }
             }
         };
     }
 
-    private ActionListener getSelectTrainingImageListener(final JTextField trainImageLoc)
-    {
-        return new ActionListener()
-        {
+    private ActionListener getSelectTrainingImageListener(final JTextField trainImageLoc) {
+        return new ActionListener() {
 
-            public void actionPerformed(ActionEvent e)
-            {
+            public void actionPerformed(ActionEvent e) {
                 JFileChooser chooser = JavaOCRUtil.getFileChooser();
                 chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 
                 int returnVal = chooser.showOpenDialog(null);
-                if (returnVal == JFileChooser.APPROVE_OPTION)
-                {
+                if (returnVal == JFileChooser.APPROVE_OPTION) {
                     trainImageLoc.setText(chooser.getSelectedFile().getAbsolutePath());
                 }
             }
         };
     }
-    private static final Logger LOG = Logger.getLogger(TrainingImageSelector.class.getName());
 }

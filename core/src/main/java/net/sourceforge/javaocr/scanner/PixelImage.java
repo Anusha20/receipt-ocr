@@ -9,6 +9,7 @@ import java.awt.Component;
 import java.awt.Image;
 import java.awt.image.MemoryImageSource;
 import java.awt.image.PixelGrabber;
+import java.io.Serializable;
 import java.util.logging.Logger;
 
 
@@ -16,9 +17,8 @@ import java.util.logging.Logger;
 /**
  * Class to contain a pixel representation of an image.
  * @author Ronald B. Cemer
- * @deprecated   no need for double functionality
  */
-public class PixelImage
+public class PixelImage implements Serializable
 {
     // 10-tap, lowpass Finite Impulse Response (FIR) filter.
 
