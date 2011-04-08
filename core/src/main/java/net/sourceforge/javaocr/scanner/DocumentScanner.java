@@ -22,12 +22,12 @@ public class DocumentScanner
      * in order for the new (short) row to be merged in with the previous (tall)
      * row to form a single row.
      */
-    protected float shortRowFraction = 0.125f;
+    protected float shortRowFraction = 0.005f;
     /**
      * The minimum fraction of pixels in an area which must be white in order for the area to
      * be considered whitespace when the liberal whitespace policy is in effect.
      */
-    protected float liberalPolicyAreaWhitespaceFraction = 0.95f;
+    protected float liberalPolicyAreaWhitespaceFraction = 0.85f;
     /**
      * The minimum arrayWidth of a space, expressed as a fraction of the arrayHeight of a row of text.
      */
@@ -35,12 +35,12 @@ public class DocumentScanner
     /**
      * The minimum arrayWidth of a character, expressed as a fraction of the arrayHeight of a row of text.
      */
-    protected float minCharWidthAsFractionOfRowHeight = 0.35f;
+    protected float minCharWidthAsFractionOfRowHeight = 0.25f;
     /**
      * The minimum arrayWidth of a character break (a vertical column of whitespace that separates
      * two characters on a row of text), expressed as a fraction of the arrayHeight of a row of text.
      */
-    protected float minCharBreakWidthAsFractionOfRowHeight = 0.05f;
+    protected float minCharBreakWidthAsFractionOfRowHeight = 0.001f;
     /**
      * The white threshold.  Any pixel value that is greater than or equal to this value,
      * will be considered to be white space for the purpose of separating rows of text
@@ -296,8 +296,27 @@ public class DocumentScanner
         blockX2++;
         blockY2++;
 
-        boolean whiteLine = true;
         listener.beginDocument(pixelImage);
+        ArrayList<Integer> al = extractRows(pixelImage, blockX1, blockY1, blockX2, blockY2);
+        // Process the rows.
+        for (int i = 0; (i + 1) < al.size(); i += 2)
+        {
+            int bY1 = (al.get(i)).intValue();
+            int bY2 = (al.get(i + 1)).intValue();
+
+///
+///System.err.println("process row: "+blockX1+","+bY1+" "+blockX2+","+bY2);
+            processRow(pixelImage,
+                    listener,
+                    pixels, w, h, blockX1, bY1, blockX2, bY2);
+        }
+    }
+
+    public ArrayList<Integer> extractRows(PixelImage pixelImage, int blockX1, int blockY1, int blockX2, int blockY2) {
+        int[] pixels = pixelImage.pixels;
+        int w = pixelImage.width;
+        boolean whiteLine = true;
+
         // First build list of rows of text.
         ArrayList<Integer> al = new ArrayList<Integer>();
         int y1 = 0;
@@ -364,18 +383,7 @@ public class DocumentScanner
             al.add(new Integer(blockY1));
             al.add(new Integer(blockY2));
         }
-        // Process the rows.
-        for (int i = 0; (i + 1) < al.size(); i += 2)
-        {
-            int bY1 = (al.get(i)).intValue();
-            int bY2 = (al.get(i + 1)).intValue();
-
-///
-///System.err.println("process row: "+blockX1+","+bY1+" "+blockX2+","+bY2);
-            processRow(pixelImage,
-                    listener,
-                    pixels, w, h, blockX1, bY1, blockX2, bY2);
-        }
+        return al;
     }
 
     private void processRow(
@@ -402,7 +410,7 @@ public class DocumentScanner
         ArrayList<Integer> al = new ArrayList<Integer>();
         boolean inCharSeparator = true;
         int charX1 = 0, prevCharX1 = -1;
-        boolean liberalWhitespacePolicy = false;
+        boolean liberalWhitespacePolicy = true;
         int numConsecutiveWhite = 0;
         for (int x = x1 + 1; x < (x2 - 1); x++)
         {

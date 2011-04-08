@@ -7,6 +7,7 @@
 package net.sourceforge.javaocr.ocrPlugins.mseOCR;
 
 import net.sourceforge.javaocr.ocrPlugins.imgShearer.ImageShearer;
+import net.sourceforge.javaocr.ocrPlugins.levelsCorrector.LevelsCorrector;
 import net.sourceforge.javaocr.ocrPlugins.receiptFinder.ReceiptFinder;
 import net.sourceforge.javaocr.scanner.DocumentScanner;
 import net.sourceforge.javaocr.scanner.DocumentScannerListenerAdaptor;
@@ -119,15 +120,15 @@ public class OCRScanner extends DocumentScannerListenerAdaptor implements Accura
         this.acceptableChars = acceptableChars;
         PixelImage pixelImage = new PixelImage(image);
         pixelImage.toGrayScale(true);
+        new LevelsCorrector().adjustImageLevels(pixelImage);
         pixelImage.filter();
         new ReceiptFinder().findReceipt(documentScanner, pixelImage);
         pixelImage = new ImageShearer().shearImage(documentScanner, pixelImage);
 
-        BufferedImage newImage = new BufferedImage(pixelImage.width, pixelImage.height, BufferedImage.TYPE_INT_RGB);
+        BufferedImage newImage = new BufferedImage(pixelImage.width, pixelImage.height, BufferedImage.TYPE_BYTE_INDEXED);
         WritableRaster raster = (WritableRaster) newImage.getData();
         raster.setPixels(0, 0, pixelImage.width, pixelImage.height, pixelImage.pixels);
-
-        image = newImage;
+        newImage.setData(raster);
 
         decodeBuffer.setLength(0);
         firstRow = true;
