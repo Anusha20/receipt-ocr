@@ -9,10 +9,7 @@ package net.sourceforge.javaocr.ocrPlugins.mseOCR;
 import net.sourceforge.javaocr.ocrPlugins.imgShearer.ImageShearer;
 import net.sourceforge.javaocr.ocrPlugins.levelsCorrector.LevelsCorrector;
 import net.sourceforge.javaocr.ocrPlugins.receiptFinder.ReceiptFinder;
-import net.sourceforge.javaocr.scanner.DocumentScanner;
-import net.sourceforge.javaocr.scanner.DocumentScannerListenerAdaptor;
-import net.sourceforge.javaocr.scanner.PixelImage;
-import net.sourceforge.javaocr.scanner.TrainingImage;
+import net.sourceforge.javaocr.scanner.*;
 import net.sourceforge.javaocr.scanner.accuracy.AccuracyListenerInterface;
 import net.sourceforge.javaocr.scanner.accuracy.AccuracyProviderInterface;
 import net.sourceforge.javaocr.scanner.accuracy.OCRComp;
@@ -21,9 +18,8 @@ import net.sourceforge.javaocr.scanner.accuracy.OCRIdentification;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.WritableRaster;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
+import java.util.*;
+import java.util.List;
 import java.util.logging.Logger;
 
 /**
@@ -34,15 +30,17 @@ import java.util.logging.Logger;
 public class OCRScanner extends DocumentScannerListenerAdaptor implements AccuracyProviderInterface {
 
     private static final int BEST_MATCH_STORE_COUNT = 8;
-    private StringBuffer decodeBuffer = new StringBuffer();
+    //    private StringBuffer decodeBuffer = new StringBuffer();
     private CharacterRange[] acceptableChars;
-    private boolean firstRow = false;
+    //    private boolean firstRow = false;
     private String newline = System.getProperty("line.separator");
     private HashMap<Character, ArrayList<TrainingImage>> trainingImages = new HashMap<Character, ArrayList<TrainingImage>>();
-    private Character[] bestChars = new Character[BEST_MATCH_STORE_COUNT];
+    private RecognizedChar[] bestChars = new RecognizedChar[BEST_MATCH_STORE_COUNT];
     private double[] bestMSEs = new double[BEST_MATCH_STORE_COUNT];
     private DocumentScanner documentScanner = new DocumentScanner();
     private AccuracyListenerInterface accListener;
+    private FoundWord currentWord;
+    private List<FoundWord> words;
 
     public void acceptAccuracyListener(AccuracyListenerInterface listener) {
         accListener = listener;
@@ -102,13 +100,16 @@ public class OCRScanner extends DocumentScannerListenerAdaptor implements Accura
      *                        or <code>null</code> to not limit which characters can be decoded.
      * @return The decoded text.
      */
-    public String scan(
+    public java.util.List<FoundWord> scan(
             Image image,
             int x1,
             int y1,
             int x2,
             int y2,
             CharacterRange[] acceptableChars) {
+
+        currentWord = new FoundWord();
+        words = new LinkedList<FoundWord>();
 
         this.acceptableChars = acceptableChars;
         PixelImage pixelImage = new PixelImage(image);
@@ -123,12 +124,8 @@ public class OCRScanner extends DocumentScannerListenerAdaptor implements Accura
         raster.setPixels(0, 0, pixelImage.width, pixelImage.height, pixelImage.pixels);
         newImage.setData(raster);
 
-        decodeBuffer.setLength(0);
-        firstRow = true;
         documentScanner.scan(pixelImage, this, x1, y1, x2, y2);
-        String result = decodeBuffer.toString();
-        decodeBuffer.setLength(0);
-        return result;
+        return words;
     }
 
     @Override
@@ -143,11 +140,14 @@ public class OCRScanner extends DocumentScannerListenerAdaptor implements Accura
 
     @Override
     public void beginRow(PixelImage pixelImage, int y1, int y2) {
-        if (firstRow) {
-            firstRow = false;
-        } else {
-            decodeBuffer.append(newline);
+        endWord();
+    }
+
+    private void endWord() {
+        if (currentWord.getSize() > 0) {
+            words.add(currentWord);
         }
+        currentWord = new FoundWord();
     }
 
     @Override
@@ -190,6 +190,7 @@ public class OCRScanner extends DocumentScannerListenerAdaptor implements Accura
             int nimg = al.size();
             if (nimg > 0) {
                 double mse = 0.0;
+                TrainingImage mseImg = null;
                 boolean gotAny = false;
                 for (TrainingImage ti : al) {
                     if (isTrainingImageACandidate(
@@ -203,6 +204,7 @@ public class OCRScanner extends DocumentScannerListenerAdaptor implements Accura
                         if ((!gotAny) || (thisMSE < mse)) {
                             gotAny = true;
                             mse = thisMSE;
+                            mseImg = ti;
                         }
                     }
                 }
@@ -218,7 +220,8 @@ public class OCRScanner extends DocumentScannerListenerAdaptor implements Accura
                                 bestChars[j] = bestChars[k];
                                 bestMSEs[j] = bestMSEs[k];
                             }
-                            bestChars[i] = ch;
+                            final FoundChar foundChar = new FoundChar(pixelImage, x1, y1, x2, y2, rowY1, rowY2);
+                            bestChars[i] = new RecognizedChar(ch, mseImg, foundChar);
                             bestMSEs[i] = mse;
                             if (bestCount < BEST_MATCH_STORE_COUNT) {
                                 bestCount++;
@@ -228,7 +231,8 @@ public class OCRScanner extends DocumentScannerListenerAdaptor implements Accura
                         }
                     }
                     if ((!inserted) && (bestCount < BEST_MATCH_STORE_COUNT)) {
-                        bestChars[bestCount] = ch;
+                        final FoundChar foundChar = new FoundChar(pixelImage, x1, y1, x2, y2, rowY1, rowY2);
+                        bestChars[bestCount] = new RecognizedChar(ch, mseImg, foundChar);
                         bestMSEs[bestCount] = mse;
                         bestCount++;
                     }
@@ -239,13 +243,13 @@ public class OCRScanner extends DocumentScannerListenerAdaptor implements Accura
 /// decoding; not when loading training images) so that the aspect ratio of a non-empty character
 /// block is limited to within the min and max of the aspect ratios in the training set.
         if (bestCount > 0) {
-            decodeBuffer.append(bestChars[0].charValue());
+            currentWord.addRecognizedChar(bestChars[0]);
 
             //Send accuracy of this identification to the listener
             if (accListener != null) {
                 OCRIdentification identAccuracy = new OCRIdentification(OCRComp.MSE);
                 for (int i = 0; i < bestCount; i++) {
-                    identAccuracy.addChar((char) bestChars[i], bestMSEs[i]);
+                    identAccuracy.addChar(bestChars[i].getRecognizedChar(), bestMSEs[i]);
                 }
                 accListener.processCharOrSpace(identAccuracy);
             }
@@ -305,7 +309,7 @@ public class OCRScanner extends DocumentScannerListenerAdaptor implements Accura
 
     @Override
     public void processSpace(PixelImage pixelImage, int x1, int y1, int x2, int y2) {
-        decodeBuffer.append(' ');
+        endWord();
         //Send accuracy of this identification to the listener
         if (accListener != null) {
             OCRIdentification identAccuracy = new OCRIdentification(OCRComp.MSE);

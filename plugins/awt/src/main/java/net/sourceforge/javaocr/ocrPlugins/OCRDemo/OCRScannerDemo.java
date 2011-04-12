@@ -11,10 +11,12 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import net.sourceforge.javaocr.ocrPlugins.mseOCR.CharacterRange;
 import net.sourceforge.javaocr.ocrPlugins.mseOCR.OCRScanner;
+import net.sourceforge.javaocr.scanner.FoundWord;
 import net.sourceforge.javaocr.scanner.TrainingImage;
 import net.sourceforge.javaocr.ocrPlugins.mseOCR.TrainingImageLoader;
 import net.sourceforge.javaocr.scanner.PixelImage;
@@ -139,7 +141,12 @@ public class OCRScannerDemo
         }
        
         System.out.println(imageFilename + ":");
-        String text = scanner.scan(image, 0, 0, 0, 0, null);
+        List<FoundWord> words = scanner.scan(image, 0, 0, 0, 0, null);
+        StringBuilder text = new StringBuilder();
+        for (FoundWord word : words) {
+            text.append(word.getRecognizedString());
+            text.append(' ');
+        }
         System.out.println("[" + text + "]");
     }
 

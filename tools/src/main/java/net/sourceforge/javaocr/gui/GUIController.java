@@ -9,11 +9,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -31,6 +27,7 @@ import net.sourceforge.javaocr.ocrPlugins.charTracer.CharacterTracer;
 import net.sourceforge.javaocr.ocrPlugins.lineExtractor.LineExtractor;
 import net.sourceforge.javaocr.ocrPlugins.handWriting.HandwritingOCR;
 import net.sourceforge.javaocr.ocrPlugins.mseOCR.CharacterRange;
+import net.sourceforge.javaocr.scanner.FoundWord;
 import net.sourceforge.javaocr.scanner.TrainingImage;
 
 /**
@@ -60,8 +57,13 @@ public class GUIController
         HashMap<Character, ArrayList<TrainingImage>> trainingImages = getTrainingImageMap(imgs);
         ocrScanner.addTrainingImages(trainingImages);
         BufferedImage targetImage = ImageIO.read(new File(targImageLoc));
-        String text = ocrScanner.scan(targetImage, 0, 0, 0, 0, null);
-        return text;
+        List<FoundWord> words = ocrScanner.scan(targetImage, 0, 0, 0, 0, null);
+        StringBuilder text = new StringBuilder();
+        for (FoundWord word : words) {
+            text.append(word.getRecognizedString());
+            text.append(' ');
+        }
+        return text.toString();
     }
 
     public void traceChars(File imageFile)
