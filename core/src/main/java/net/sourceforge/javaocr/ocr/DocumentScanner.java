@@ -8,18 +8,17 @@ package net.sourceforge.javaocr.ocr;
 
 import net.sourceforge.javaocr.DocumentScannerListener;
 import net.sourceforge.javaocr.Image;
-import net.sourceforge.javaocr.ImageScanner;
 
 import java.util.ArrayList;
 
 /**
  * Utility class to scan a document, breaking it into rows and character blocks.
  * TODO: evaluate and maybe rewrite
+ *
  * @author Ronald B. Cemer
  * @author Konstantin Pribluda
- * @deprecated finctionality now in image slicers
  */
-public class DocumentScanner implements ImageScanner {
+public class DocumentScanner {
 
     /**
      * The maximum fraction a row's arrayHeight can be of the previous row's arrayHeight,
@@ -301,7 +300,7 @@ public class DocumentScanner implements ImageScanner {
                 liberalWhitespacePolicy = true;
             }
             int numWhitePixelsThisColumn = 0;
-            boolean isWhiteSpace = pixelImage.verticalSpanEquals(x,y1,y2-1, 0);
+            boolean isWhiteSpace = pixelImage.verticalSpanEquals(x, y1, y2 - 1, 0);
 
             if ((liberalWhitespacePolicy)
                     && (numWhitePixelsThisColumn
@@ -366,7 +365,7 @@ public class DocumentScanner implements ImageScanner {
             int cy1 = y1;
             // Adjust cy1 down to point to the the top line which is not all white.
             while (cy1 < y2) {
-                boolean isWhiteSpace = pixelImage.horizontalSpanEquals(cy1,cx1,cx2-1, 0);
+                boolean isWhiteSpace = pixelImage.horizontalSpanEquals(cy1, cx1, cx2 - 1, 0);
                 if (!isWhiteSpace) {
                     break;
                 }
@@ -376,8 +375,8 @@ public class DocumentScanner implements ImageScanner {
             // Adjust cy2 up to point to the the line after the last line
             // which is not all white.
             while (cy2 > cy1) {
-                boolean isWhiteSpace = pixelImage.horizontalSpanEquals(cy2-1,cx1,cx2-1, 0);
-   
+                boolean isWhiteSpace = pixelImage.horizontalSpanEquals(cy2 - 1, cx1, cx2 - 1, 0);
+
                 if (!isWhiteSpace) {
                     break;
                 }

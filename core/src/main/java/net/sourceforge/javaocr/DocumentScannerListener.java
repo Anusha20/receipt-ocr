@@ -5,12 +5,10 @@
 // Please see the accompanying LICENSE.txt for details.
 package net.sourceforge.javaocr;
 
-
 /**
  * Listener interface for the DocumentScanner utility class.
  *
  * @author Ronald B. Cemer
- * @deprecated use image slicing instead
  */
 public interface DocumentScannerListener {
 

@@ -213,85 +213,6 @@ public class DocumentScanner
             blockY2 = h - 1;
         }
 
-        /*
-        int origBlockX1 = blockX1, origBlockY1 = blockY1, origBlockX2 = blockX2, origBlockY2 = blockY2;
-
-        // Narrow the block until there are no remaining dark edges.
-        ///	int thresh = Math.min(255, whiteThreshold+(whiteThreshold/4));
-        int thresh = whiteThreshold;
-        float blackElimFraction = 0.1f;
-        ///System.out.println("thresh="+thresh);
-        for (boolean reduced = true; reduced;) {
-        reduced = false;
-        // Left edge
-        int blackCount = 0;
-        int idx = (blockY1*w)+blockX1;
-        int maxBlack = Math.max(1, (int)((float)((blockY2+1)-blockY1)*blackElimFraction));
-        for (int y = blockY1; y <= blockY2; y++, idx += w) {
-        if (pixels[idx] < thresh) blackCount++;
-        }
-        ///System.out.println("left blackCount="+blackCount+" maxBlack="+maxBlack+" blockY1="+blockY1+" blockY2="+blockY2);
-        if (blackCount >= maxBlack) {
-        ///System.out.println("    reduce left");
-        reduced = true;
-        blockX1++;
-        if (blockX1 >= blockX2) break;
-        }
-        // Right edge
-        blackCount = 0;
-        idx = (blockY1*w)+blockX2;
-        maxBlack = Math.max(1, (int)((float)((blockY2+1)-blockY1)*blackElimFraction));
-        for (int y = blockY1; y <= blockY2; y++, idx += w) {
-        ///System.out.print("["+pixels[idx]+"]");
-        if (pixels[idx] < thresh) blackCount++;
-        }
-        ///System.out.println();
-        ///System.out.println("right blackCount="+blackCount+" maxBlack="+maxBlack+" blockY1="+blockY1+" blockY2="+blockY2);
-        if (blackCount >= maxBlack) {
-        ///System.out.println("    reduce right");
-        reduced = true;
-        blockX2--;
-        if (blockX1 >= blockX2) break;
-        }
-        // Top edge
-        blackCount = 0;
-        idx = (blockY1*w)+blockX1;
-        maxBlack = Math.max(1, (int)((float)((blockX2+1)-blockX1)*blackElimFraction));
-        for (int x = blockX1; x <= blockX2; x++, idx++) {
-        if (pixels[idx] < thresh) blackCount++;
-        }
-        ///System.out.println("top blackCount="+blackCount+" maxBlack="+maxBlack+" blockX1="+blockX1+" blockX2="+blockX2);
-        if (blackCount >= maxBlack) {
-        ///System.out.println("    reduce top");
-        reduced = true;
-        blockY1++;
-        if (blockY1 >= blockY2) break;
-        }
-        // Bottom edge
-        blackCount = 0;
-        idx = (blockY2*w)+blockX1;
-        maxBlack = Math.max(1, (int)((float)((blockX2+1)-blockX1)*blackElimFraction));
-        for (int x = blockX1; x <= blockX2; x++, idx++) {
-        if (pixels[idx] < thresh) blackCount++;
-        }
-        ///System.out.println("bottom blackCount="+blackCount+" maxBlack="+maxBlack+" blockX1="+blockX1+" blockX2="+blockX2);
-        if (blackCount >= maxBlack) {
-        ///System.out.println("    reduce bottom");
-        reduced = true;
-        blockY2--;
-        if (blockY1 >= blockY2) break;
-        }
-        }
-
-        if ( (blockX1 >= blockX2) || (blockY1 >= blockY2) ) {
-        // Reduction failed; restore to original values.
-        blockX1 = origBlockX1;
-        blockY1 = origBlockY1;
-        blockX2 = origBlockX2;
-        blockY2 = origBlockY2;
-        }
-         */
-
         blockX2++;
         blockY2++;
 
@@ -351,8 +272,8 @@ public class DocumentScanner
         }
         if (!whiteLine)
         {
-            al.add(new Integer(y1));
-            al.add(new Integer(blockY2));
+            al.add(y1);
+            al.add(blockY2);
         }
         // Now for each row that looks unreasonably short
         // compared to the previous row, merge the short row into
