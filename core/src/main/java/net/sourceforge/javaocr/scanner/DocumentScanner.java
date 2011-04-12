@@ -12,7 +12,6 @@ import java.util.logging.Logger;
 /**
  * Utility class to scan a document, breaking it into rows and character blocks.
  * @author Ronald B. Cemer
- * @deprecated duplicates functionlaity
  */
 public class DocumentScanner
 {
@@ -301,8 +300,8 @@ public class DocumentScanner
         // Process the rows.
         for (int i = 0; (i + 1) < al.size(); i += 2)
         {
-            int bY1 = (al.get(i)).intValue();
-            int bY2 = (al.get(i + 1)).intValue();
+            int bY1 = al.get(i);
+            int bY2 = al.get(i + 1);
 
 ///
 ///System.err.println("process row: "+blockX1+","+bY1+" "+blockX2+","+bY2);
@@ -337,8 +336,8 @@ public class DocumentScanner
                 if (!whiteLine)
                 {
                     whiteLine = true;
-                    al.add(new Integer(y1));
-                    al.add(new Integer(y));
+                    al.add(y1);
+                    al.add(y);
                 }
             }
             else
@@ -361,10 +360,10 @@ public class DocumentScanner
         // underscores.
         for (int i = 0; (i + 4) <= al.size(); i += 2)
         {
-            int bY0 = (al.get(i)).intValue();
-            int bY1 = (al.get(i + 1)).intValue();
-            int bY2 = (al.get(i + 2)).intValue();
-            int bY3 = (al.get(i + 3)).intValue();
+            int bY0 = al.get(i);
+            int bY1 = al.get(i + 1);
+            int bY2 = al.get(i + 2);
+            int bY3 = al.get(i + 3);
             int row0H = bY1 - bY0;
             int whiteH = bY2 - bY1;
             int row1H = bY3 - bY2;
@@ -380,8 +379,8 @@ public class DocumentScanner
         }
         if (al.size() == 0)
         {
-            al.add(new Integer(blockY1));
-            al.add(new Integer(blockY2));
+            al.add(blockY1);
+            al.add(blockY2);
         }
         return al;
     }
@@ -409,7 +408,7 @@ public class DocumentScanner
         // X positions and calculate average character spacing.
         ArrayList<Integer> al = new ArrayList<Integer>();
         boolean inCharSeparator = true;
-        int charX1 = 0, prevCharX1 = -1;
+        int charX1 = 0;
         boolean liberalWhitespacePolicy = true;
         int numConsecutiveWhite = 0;
         for (int x = x1 + 1; x < (x2 - 1); x++)
@@ -455,8 +454,8 @@ public class DocumentScanner
                     if (!inCharSeparator)
                     {
                         inCharSeparator = true;
-                        al.add(new Integer(charX1));
-                        al.add(new Integer(x - (numConsecutiveWhite - 1)));
+                        al.add(charX1);
+                        al.add(x - (numConsecutiveWhite - 1));
                     }
                 }
             }
@@ -466,7 +465,6 @@ public class DocumentScanner
                 if (inCharSeparator)
                 {
                     inCharSeparator = false;
-                    prevCharX1 = charX1;
                     charX1 = x;
                     liberalWhitespacePolicy = false;
                 }
@@ -474,8 +472,8 @@ public class DocumentScanner
         }
         if (numConsecutiveWhite == 0)
         {
-            al.add(new Integer(charX1));
-            al.add(new Integer(x2));
+            al.add(charX1);
+            al.add(x2);
         }
         int minSpaceWidth =
                 (int) ((float) rowHeight * minSpaceWidthAsFractionOfRowHeight);
@@ -489,9 +487,7 @@ public class DocumentScanner
         }
         for (int i = 0; (i + 4) < al.size(); i += 2)
         {
-            int thisCharWidth =
-                    (al.get(i + 2)).intValue()
-                    - (al.get(i)).intValue();
+            int thisCharWidth = al.get(i + 2) - al.get(i);
             if ((thisCharWidth < minCharWidth) || (thisCharWidth < 6))
             {
                 al.remove(i + 2);
@@ -504,8 +500,8 @@ public class DocumentScanner
         {
             if (i >= 2)
             {
-                int cx1 = (al.get(i - 1)).intValue();
-                int cx2 = (al.get(i)).intValue();
+                int cx1 = al.get(i - 1);
+                int cx2 = al.get(i);
                 while ((cx2 - cx1) >= minSpaceWidth)
                 {
                     int sx2 = Math.min(cx1 + minSpaceWidth, cx2);
@@ -513,8 +509,8 @@ public class DocumentScanner
                     cx1 += minSpaceWidth;
                 }
             }
-            int cx1 = (al.get(i)).intValue();
-            int cx2 = (al.get(i + 1)).intValue();
+            int cx1 = al.get(i);
+            int cx2 = al.get(i + 1);
             int cy1 = y1;
             // Adjust cy1 down to point to the the top line which is not all white.
             while (cy1 < y2)
