@@ -5,7 +5,7 @@
 // Please see the accompanying LICENSE.txt for details.
 package net.sourceforge.javaocr.ocrPlugins.aspectRatio;
 
-import net.sourceforge.javaocr.ocrPlugins.mseOCR.TrainingImage;
+import net.sourceforge.javaocr.scanner.TrainingImage;
 import net.sourceforge.javaocr.scanner.DocumentScanner;
 import net.sourceforge.javaocr.scanner.DocumentScannerListenerAdaptor;
 import net.sourceforge.javaocr.scanner.PixelImage;

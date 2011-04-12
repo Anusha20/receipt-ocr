@@ -2,18 +2,18 @@ package net.sourceforge.javaocr.scanner;
 
 public class RecognizedChar {
     final char recognizedChar;
-    final TrainingChar trainingChar;
+    final TrainingImage trainingImage;
 
-    public RecognizedChar(char recognizedChar, TrainingChar trainingChar) {
+    public RecognizedChar(char recognizedChar, TrainingImage trainingImage) {
         this.recognizedChar = recognizedChar;
-        this.trainingChar = trainingChar;
+        this.trainingImage = trainingImage;
     }
 
     public char getRecognizedChar() {
         return recognizedChar;
     }
 
-    public TrainingChar getTrainingChar() {
-        return trainingChar;
+    public TrainingImage getTrainingImage() {
+        return trainingImage;
     }
 }

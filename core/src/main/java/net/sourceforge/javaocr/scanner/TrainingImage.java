@@ -3,10 +3,9 @@
 // All rights reserved.
 // This software is released under the BSD license.
 // Please see the accompanying LICENSE.txt for details.
-package net.sourceforge.javaocr.ocrPlugins.mseOCR;
+package net.sourceforge.javaocr.scanner;
 
-import net.sourceforge.javaocr.scanner.PixelImage;
-
+import java.io.Serializable;
 import java.util.logging.Logger;
 
 /**
@@ -14,10 +13,10 @@ import java.util.logging.Logger;
  * A training image is a representative image for a single character, and is
  * used to determine the likelihood that a given character image is a
  * particular character.
+ *
  * @author Ronald B. Cemer
  */
-public class TrainingImage extends PixelImage
-{
+public class TrainingImage extends PixelImage implements Serializable {
 
     /**
      * This is the maximum variance of aspect ratio between a training image
@@ -49,27 +48,30 @@ public class TrainingImage extends PixelImage
      * Fraction of the row arrayHeight which is occupied by complete whitespace below the character.
      */
     public final float bottomWhiteSpaceFraction;
-    private int myMaxX;
-    private int myMaxY;
+    private final int myMaxX;
+    private final int myMaxY;
+
+    private int positiveScore;
+    private int negativeScore;
 
     /**
      * Construct a new <code>TrainingImage</code> object from an array of
      * gray scale pixels.
-     * @param pixels An array of pixels in the range 0-255.
-     * @param width The arrayWidth of the image.
-     * @param height The arrayHeight of the image.
-     * @param topWhiteSpacePixels The number of scan lines at the top of this character cell which
-     * are all white.  These are excluded from the arrayWidth and arrayHeight of the training image.
+     *
+     * @param pixels                 An array of pixels in the range 0-255.
+     * @param width                  The arrayWidth of the image.
+     * @param height                 The arrayHeight of the image.
+     * @param topWhiteSpacePixels    The number of scan lines at the top of this character cell which
+     *                               are all white.  These are excluded from the arrayWidth and arrayHeight of the training image.
      * @param bottomWhiteSpacePixels The number of scan lines at the bottom of this character cell
-     * which are all white.  These are excluded from the arrayWidth and arrayHeight of the training image.
+     *                               which are all white.  These are excluded from the arrayWidth and arrayHeight of the training image.
      */
     public TrainingImage(
             int[] pixels,
             int width,
             int height,
             int topWhiteSpacePixels,
-            int bottomWhiteSpacePixels)
-    {
+            int bottomWhiteSpacePixels) {
 
         super(pixels, width, height);
         int rowHeight =
@@ -84,22 +86,22 @@ public class TrainingImage extends PixelImage
 
     /**
      * Calculate the error factor between a block of pixels and our image.
+     *
      * @param theirPixels An array of grayscale pixels which contains the block to be compared
-     * This should be in binary format, with each pixel having a value of either <code>0</code>
-     * or <code>255</code>.
-     * @param w The arrayWidth of the pixel array.
-     * @param h The arrayHeight of the pixel array.
-     * @param x1 The position of the left border of the rectangle to be compared.
-     * @param y1 The position of the top border of the rectangle to be compared.
-     * @param x2 The position of the right border of the rectangle to be compared.
-     * Note that pixels up to, but not including this position, will be compared.
-     * @param y2 The position of the bottom border of the rectangle to be compared.
-     * Note that pixels up to, but not including this position, will be compared.
+     *                    This should be in binary format, with each pixel having a value of either <code>0</code>
+     *                    or <code>255</code>.
+     * @param w           The arrayWidth of the pixel array.
+     * @param h           The arrayHeight of the pixel array.
+     * @param x1          The position of the left border of the rectangle to be compared.
+     * @param y1          The position of the top border of the rectangle to be compared.
+     * @param x2          The position of the right border of the rectangle to be compared.
+     *                    Note that pixels up to, but not including this position, will be compared.
+     * @param y2          The position of the bottom border of the rectangle to be compared.
+     *                    Note that pixels up to, but not including this position, will be compared.
      * @return A <code>double</code> representing the average per-pixel mean square error.
-     * Lower numbers indicate a better match.
+     *         Lower numbers indicate a better match.
      */
-    public double calcMSE(int[] theirPixels, int w, int h, int x1, int y1, int x2, int y2)
-    {
+    public double calcMSE(int[] theirPixels, int w, int h, int x1, int y1, int x2, int y2) {
         int theirXRange = Math.max((x2 - x1) - 1, 1);
         int theirYRange = Math.max((y2 - y1) - 1, 1);
         int theirNPix = (theirXRange + 1) * (theirYRange + 1);
@@ -110,21 +112,16 @@ public class TrainingImage extends PixelImage
         totalError = 0L;
 
         for (int theirY = y1, yScan = 0 /*yo */;
-                theirY < y2; theirY++, yScan++)
-        {
+             theirY < y2; theirY++, yScan++) {
             theirIdx = (theirY * w) + x1;
             myY = ((yScan * myMaxY) / theirYRange);
             myLineIdx = myY * width;
             for (int theirX = x1, xScan = 0 /*xo */;
-                    theirX < x2; theirX++, theirIdx++, xScan++)
-            {
+                 theirX < x2; theirX++, theirIdx++, xScan++) {
                 myX = ((xScan * myMaxX) / theirXRange);
-                if ((myX < 0) || (myX > myMaxX) || (myY < 0) || (myY > myMaxY))
-                {
+                if ((myX < 0) || (myX > myMaxX) || (myY < 0) || (myY > myMaxY)) {
                     thisError = theirPixels[theirIdx] - 255;
-                }
-                else
-                {
+                } else {
                     thisError = theirPixels[theirIdx] - pixels[myLineIdx + myX];
                 }
                 totalError += (thisError * thisError);
@@ -134,5 +131,22 @@ public class TrainingImage extends PixelImage
 
         return Math.sqrt((double) minError) / (double) theirNPix;
     }
+
+    public int increasePositiveScore() {
+        return ++positiveScore;
+    }
+
+    public int increaseNegativeScore() {
+        return ++negativeScore;
+    }
+
+    public int getPositiveScore() {
+        return positiveScore;
+    }
+
+    public int getNegativeScore() {
+        return negativeScore;
+    }
+
     private static final Logger LOG = Logger.getLogger(TrainingImage.class.getName());
 }

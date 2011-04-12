@@ -31,7 +31,7 @@ import net.sourceforge.javaocr.ocrPlugins.charTracer.CharacterTracer;
 import net.sourceforge.javaocr.ocrPlugins.lineExtractor.LineExtractor;
 import net.sourceforge.javaocr.ocrPlugins.handWriting.HandwritingOCR;
 import net.sourceforge.javaocr.ocrPlugins.mseOCR.CharacterRange;
-import net.sourceforge.javaocr.ocrPlugins.mseOCR.TrainingImage;
+import net.sourceforge.javaocr.scanner.TrainingImage;
 
 /**
  * Allows all GUI elements to be controlled.

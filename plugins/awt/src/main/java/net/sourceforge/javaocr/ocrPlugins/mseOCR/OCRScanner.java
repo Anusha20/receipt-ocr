@@ -12,6 +12,7 @@ import net.sourceforge.javaocr.ocrPlugins.receiptFinder.ReceiptFinder;
 import net.sourceforge.javaocr.scanner.DocumentScanner;
 import net.sourceforge.javaocr.scanner.DocumentScannerListenerAdaptor;
 import net.sourceforge.javaocr.scanner.PixelImage;
+import net.sourceforge.javaocr.scanner.TrainingImage;
 import net.sourceforge.javaocr.scanner.accuracy.AccuracyListenerInterface;
 import net.sourceforge.javaocr.scanner.accuracy.AccuracyProviderInterface;
 import net.sourceforge.javaocr.scanner.accuracy.OCRComp;

@@ -9,6 +9,7 @@ package net.sourceforge.javaocr.ocrPlugins.mseOCR;
 import net.sourceforge.javaocr.scanner.DocumentScanner;
 import net.sourceforge.javaocr.scanner.DocumentScannerListenerAdaptor;
 import net.sourceforge.javaocr.scanner.PixelImage;
+import net.sourceforge.javaocr.scanner.TrainingImage;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -30,7 +31,6 @@ public class TrainingImageLoader extends DocumentScannerListenerAdaptor
 
     private int charValue = 0;
     private HashMap<Character, ArrayList<TrainingImage>> dest;
-    private boolean debug = false;
     private DocumentScanner documentScanner = new DocumentScanner();
 
     /**
@@ -72,11 +72,6 @@ public class TrainingImageLoader extends DocumentScannerListenerAdaptor
         load(image, charRange, dest, imageFilename);
     }
 
-    public void setDebug(boolean debug)
-    {
-        this.debug = debug;
-    }
-
     public void load(
             Image image,
             CharacterRange charRange,
@@ -103,13 +98,6 @@ public class TrainingImageLoader extends DocumentScannerListenerAdaptor
     @Override
     public void processChar(PixelImage pixelImage, int x1, int y1, int x2, int y2, int rowY1, int rowY2)
     {
-
-        if (debug)
-        {
-            System.out.println(
-                    "TrainingImageLoader.processChar: \'"
-                    + (char) charValue + "\' " + x1 + "," + y1 + "-" + x2 + "," + y2);
-        }
         int w = x2 - x1;
         int h = y2 - y1;
         int[] pixels = new int[w * h];
@@ -117,19 +105,7 @@ public class TrainingImageLoader extends DocumentScannerListenerAdaptor
         {
             System.arraycopy(pixelImage.pixels, (y * pixelImage.width) + x1, pixels, destY * w, w);
         }
-        if (debug)
-        {
-            for (int y = 0, idx = 0; y < h; y++)
-            {
-                for (int x = 0; x < w; x++, idx++)
-                {
-                    System.out.print((pixels[idx] > 0) ? ' ' : '*');
-                }
-                System.out.println();
-            }
-            System.out.println();
-        }
-        Character chr = new Character((char) charValue);
+        Character chr = (char) charValue;
         ArrayList<TrainingImage> al = dest.get(chr);
         if (al == null)
         {

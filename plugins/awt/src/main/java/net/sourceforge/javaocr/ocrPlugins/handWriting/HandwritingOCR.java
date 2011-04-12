@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.logging.Logger;
 import net.sourceforge.javaocr.ocrPlugins.aspectRatio.AspectRatioOCR;
 import net.sourceforge.javaocr.ocrPlugins.mseOCR.OCRScanner;
-import net.sourceforge.javaocr.ocrPlugins.mseOCR.TrainingImage;
+import net.sourceforge.javaocr.scanner.TrainingImage;
 import net.sourceforge.javaocr.scanner.accuracy.AccuracyListenerInterface;
 import net.sourceforge.javaocr.scanner.accuracy.OCRComp;
 import net.sourceforge.javaocr.scanner.accuracy.OCRIdentification;

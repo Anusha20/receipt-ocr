@@ -15,7 +15,7 @@ import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import net.sourceforge.javaocr.ocrPlugins.mseOCR.CharacterRange;
 import net.sourceforge.javaocr.ocrPlugins.mseOCR.OCRScanner;
-import net.sourceforge.javaocr.ocrPlugins.mseOCR.TrainingImage;
+import net.sourceforge.javaocr.scanner.TrainingImage;
 import net.sourceforge.javaocr.ocrPlugins.mseOCR.TrainingImageLoader;
 import net.sourceforge.javaocr.scanner.PixelImage;
 
