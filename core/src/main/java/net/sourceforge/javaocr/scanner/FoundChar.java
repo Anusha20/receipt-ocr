@@ -1,47 +1,49 @@
 package net.sourceforge.javaocr.scanner;
 
 public class FoundChar {
-    private final int width;
-    private final int height;
-    private final int rowTop;
-    private final int rowBottom;
-    private final byte pixels[];
+    private final PixelImage image;
+    final int x1;
+    final int y1;
+    final int x2;
+    final int y2;
+    final int rowY1;
+    final int rowY2;
 
-    public FoundChar(PixelImage pixelImage, int x1, int y1, int x2, int y2, int rowY1, int rowY2) {
-        this.width = x2 - x1 + 1;
-        this.height = y2 - y1 + 1;
-        this.rowTop = rowY1 - y1;
-        this.rowBottom = rowY2 - y1;
-
-        pixels = new byte[width * height];
-        int ourIndex = 0;
-        for (int y = y1; y <= y2; y++) {
-            int rowIndex = y * pixelImage.width + x1;
-            for (int x = x1; x <= x2; x++) {
-                pixels[ourIndex] = (byte) ((pixelImage.pixels[rowIndex] & 255) - 128);
-                ourIndex++;
-                rowIndex++;
-            }
-        }
+    public FoundChar(PixelImage image, int x1, int y1, int x2, int y2, int rowY1, int rowY2) {
+        this.image = image;
+        this.x1 = x1;
+        this.y1 = y1;
+        this.x2 = x2;
+        this.y2 = y2;
+        this.rowY1 = rowY1;
+        this.rowY2 = rowY2;
     }
 
-    public int getWidth() {
-        return width;
+    public PixelImage getImage() {
+        return image;
     }
 
-    public int getHeight() {
-        return height;
+    public int getX1() {
+        return x1;
     }
 
-    public int getRowTop() {
-        return rowTop;
+    public int getY1() {
+        return y1;
     }
 
-    public int getRowBottom() {
-        return rowBottom;
+    public int getX2() {
+        return x2;
     }
 
-    public byte[] getPixels() {
-        return pixels;
+    public int getY2() {
+        return y2;
+    }
+
+    public int getRowY1() {
+        return rowY1;
+    }
+
+    public int getRowY2() {
+        return rowY2;
     }
 }
