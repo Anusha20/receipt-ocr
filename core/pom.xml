@@ -11,4 +11,11 @@
     <description>
         core library for java ocr
     </description>
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.sanselan</groupId>
+            <artifactId>sanselan</artifactId>
+            <version>0.97-incubator</version>
+        </dependency>
+    </dependencies>
 </project>
