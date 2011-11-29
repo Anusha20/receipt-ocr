@@ -6,6 +6,7 @@
 // Please see the accompanying LICENSE.txt for details.
 package net.sourceforge.javaocr.ocrPlugins.mseOCR;
 
+import net.sourceforge.javaocr.ocr.ImageReader;
 import net.sourceforge.javaocr.scanner.DocumentScanner;
 import net.sourceforge.javaocr.scanner.DocumentScannerListenerAdaptor;
 import net.sourceforge.javaocr.scanner.PixelImage;
@@ -63,7 +64,7 @@ public class TrainingImageLoader extends DocumentScannerListenerAdaptor
             throws IOException
     {
 
-        Image image = ImageIO.read(new File(imageFilename));
+        Image image = ImageReader.read(new File(imageFilename));
 
         if (image == null)
         {

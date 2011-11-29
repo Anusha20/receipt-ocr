@@ -14,6 +14,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
+
+import net.sourceforge.javaocr.ocr.ImageReader;
 import net.sourceforge.javaocr.ocrPlugins.mseOCR.CharacterRange;
 import net.sourceforge.javaocr.ocrPlugins.mseOCR.OCRScanner;
 import net.sourceforge.javaocr.scanner.FoundWord;
@@ -106,7 +108,7 @@ public class OCRScannerDemo
         }
         try
         {
-            image = ImageIO.read(new File(imageFilename));
+            image = ImageReader.read(new File(imageFilename));
         }
         catch (IOException e)
         {

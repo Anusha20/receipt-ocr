@@ -5,45 +5,47 @@
 // Please see the accompanying LICENSE.txt for details.
 package net.sourceforge.javaocr.ocrPlugins.charTracer;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.image.BufferedImage;
-import java.awt.image.WritableRaster;
-import java.io.File;
-import java.io.IOException;
-import java.util.Random;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.imageio.ImageIO;
-
+import net.sourceforge.javaocr.ocr.ImageReader;
 import net.sourceforge.javaocr.ocrPlugins.imgShearer.ImageShearer;
 import net.sourceforge.javaocr.ocrPlugins.levelsCorrector.LevelsCorrector;
 import net.sourceforge.javaocr.ocrPlugins.receiptFinder.ReceiptFinder;
 import net.sourceforge.javaocr.scanner.DocumentScanner;
 import net.sourceforge.javaocr.scanner.DocumentScannerListenerAdaptor;
 import net.sourceforge.javaocr.scanner.PixelImage;
+import org.apache.sanselan.ImageReadException;
+import org.apache.sanselan.Sanselan;
+import org.apache.sanselan.common.IImageMetadata;
+import org.apache.sanselan.common.ImageMetadata;
+
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
+import java.awt.image.BufferedImage;
+import java.awt.image.WritableRaster;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Saves all the characters in an image to an output directory individually.
+ *
  * @author William Whitney
  */
-public class CharacterTracer extends DocumentScannerListenerAdaptor
-{
+public class CharacterTracer extends DocumentScannerListenerAdaptor {
 
     private DocumentScanner documentScanner = new DocumentScanner();
     private BufferedImage bfImage;
     private Graphics2D bfImageGraphics;
 
-    public BufferedImage getTracedImage(File inputImage)
-    {
-        try
-        {
-            bfImage = ImageIO.read(inputImage);
+    public BufferedImage getTracedImage(File inputImage) {
+        try {
+            bfImage = ImageReader.read(inputImage);
             bfImageGraphics = bfImage.createGraphics();
 
-            Image img = ImageIO.read(inputImage);
+            Image img = new BufferedImage(bfImage.getColorModel(), bfImage.getRaster(), bfImage.isAlphaPremultiplied(), null);
             PixelImage pixelImage = new PixelImage(img);
             pixelImage.toGrayScale(true);
             new LevelsCorrector().adjustImageLevels(pixelImage);
@@ -61,9 +63,7 @@ public class CharacterTracer extends DocumentScannerListenerAdaptor
             bfImageGraphics = bfImage.createGraphics();
 
             documentScanner.scan(pixelImage, this, 0, 0, pixelImage.width, pixelImage.height);
-        }
-        catch (IOException ex)
-        {
+        } catch (IOException ex) {
             LOG.log(Level.SEVERE, null, ex);
         }
         bfImageGraphics.dispose();
@@ -72,33 +72,26 @@ public class CharacterTracer extends DocumentScannerListenerAdaptor
     }
 
     @Override
-    public void processChar(PixelImage pixelImage, int x1, int y1, int x2, int y2, int rowY1, int rowY2)
-    {
-        try
-        {
+    public void processChar(PixelImage pixelImage, int x1, int y1, int x2, int y2, int rowY1, int rowY2) {
+        try {
             bfImageGraphics.setStroke(new BasicStroke(4));
             bfImageGraphics.setColor(Color.red);
             bfImageGraphics.drawRect(x1, y1, x2 - x1, y2 - y1);
-        }
-        catch (Exception ex)
-        {
+        } catch (Exception ex) {
             LOG.log(Level.SEVERE, null, ex);
         }
     }
 
     @Override
-    public void processSpace(PixelImage pixelImage, int x1, int y1, int x2, int y2)
-    {
-        try
-        {
+    public void processSpace(PixelImage pixelImage, int x1, int y1, int x2, int y2) {
+        try {
             bfImageGraphics.setStroke(new BasicStroke(4));
             bfImageGraphics.setColor(Color.yellow);
             bfImageGraphics.drawRect(x1, y1, x2 - x1, y2 - y1);
-        }
-        catch (Exception ex)
-        {
-           LOG.log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            LOG.log(Level.SEVERE, null, ex);
         }
     }
+
     private static final Logger LOG = Logger.getLogger(CharacterTracer.class.getName());
 }

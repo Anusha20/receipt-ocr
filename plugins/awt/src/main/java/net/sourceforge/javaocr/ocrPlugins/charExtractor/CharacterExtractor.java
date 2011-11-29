@@ -5,6 +5,7 @@
 // Please see the accompanying LICENSE.txt for details.
 package net.sourceforge.javaocr.ocrPlugins.charExtractor;
 
+import net.sourceforge.javaocr.ocr.ImageReader;
 import net.sourceforge.javaocr.scanner.DocumentScanner;
 import net.sourceforge.javaocr.scanner.DocumentScannerListenerAdaptor;
 import net.sourceforge.javaocr.scanner.PixelImage;
@@ -41,7 +42,7 @@ public class CharacterExtractor extends DocumentScannerListenerAdaptor
             this.std_height = std_height;
             this.inputImage = inputImage;
             this.outputDir = outputDir;
-            Image img = ImageIO.read(inputImage);
+            Image img = ImageReader.read(inputImage);
             PixelImage pixelImage = new PixelImage(img);
             pixelImage.toGrayScale(true);
             pixelImage.filter();
@@ -62,7 +63,7 @@ public class CharacterExtractor extends DocumentScannerListenerAdaptor
             int areaH = y2 - y1;
 
             //Extract the character
-            BufferedImage characterImage = ImageIO.read(inputImage);
+            BufferedImage characterImage = ImageReader.read(inputImage);
             characterImage = characterImage.getSubimage(x1, y1, areaW, areaH);
 
             //Scale image so that both the arrayHeight and arrayWidth are less than std size

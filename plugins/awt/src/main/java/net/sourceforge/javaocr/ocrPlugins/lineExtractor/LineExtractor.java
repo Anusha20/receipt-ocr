@@ -5,6 +5,7 @@
 // Please see the accompanying LICENSE.txt for details.
 package net.sourceforge.javaocr.ocrPlugins.lineExtractor;
 
+import net.sourceforge.javaocr.ocr.ImageReader;
 import net.sourceforge.javaocr.scanner.DocumentScanner;
 import net.sourceforge.javaocr.scanner.DocumentScannerListenerAdaptor;
 import net.sourceforge.javaocr.scanner.PixelImage;
@@ -35,7 +36,7 @@ public class LineExtractor extends DocumentScannerListenerAdaptor
         {
             this.inputImage = inputImage;
             this.outputDir = outputDir;
-            Image img = ImageIO.read(inputImage);
+            Image img = ImageReader.read(inputImage);
             PixelImage pixelImage = new PixelImage(img);
             pixelImage.toGrayScale(true);
             pixelImage.filter();
@@ -53,7 +54,7 @@ public class LineExtractor extends DocumentScannerListenerAdaptor
         try
         {
             int areaH = y2 - y1;
-            BufferedImage img = ImageIO.read(inputImage);
+            BufferedImage img = ImageReader.read(inputImage);
             int areaW = img.getWidth();
             img = img.getSubimage(0, y1, areaW, areaH);
             File outputfile = new File(outputDir + File.separator + "line_" + num + ".png");

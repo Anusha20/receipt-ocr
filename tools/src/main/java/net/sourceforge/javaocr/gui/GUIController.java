@@ -20,6 +20,7 @@ import net.sourceforge.javaocr.gui.handwritingRecognizer.HandWritingFormProcesso
 import net.sourceforge.javaocr.gui.handwritingRecognizer.ProcessPanel;
 import net.sourceforge.javaocr.gui.handwritingRecognizer.TrainingPanel;
 import net.sourceforge.javaocr.gui.meanSquareOCR.TrainingImageSpec;
+import net.sourceforge.javaocr.ocr.ImageReader;
 import net.sourceforge.javaocr.ocrPlugins.mseOCR.OCRScanner;
 import net.sourceforge.javaocr.ocrPlugins.mseOCR.TrainingImageLoader;
 import net.sourceforge.javaocr.ocrPlugins.charExtractor.CharacterExtractor;
@@ -56,7 +57,7 @@ public class GUIController
         OCRScanner ocrScanner = new OCRScanner();
         HashMap<Character, ArrayList<TrainingImage>> trainingImages = getTrainingImageMap(imgs);
         ocrScanner.addTrainingImages(trainingImages);
-        BufferedImage targetImage = ImageIO.read(new File(targImageLoc));
+        BufferedImage targetImage = ImageReader.read(new File(targImageLoc));
         List<FoundWord> words = ocrScanner.scan(targetImage, 0, 0, 0, 0, null);
         StringBuilder text = new StringBuilder();
         for (FoundWord word : words) {
@@ -171,7 +172,7 @@ public class GUIController
         handwritingOCR.setEnableMSEOCR(form.isMSEOCR());
         handwritingOCR.setEnableAspectOCR(form.isAspectOCR());
 
-        BufferedImage targetBfImage = ImageIO.read(targetImage);
+        BufferedImage targetBfImage = ImageReader.read(targetImage);
         String text = handwritingOCR.scan(targetBfImage);
 
         removeAllFiles(files);
