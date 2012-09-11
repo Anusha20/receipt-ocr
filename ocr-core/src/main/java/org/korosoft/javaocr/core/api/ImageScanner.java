@@ -37,7 +37,7 @@ public interface ImageScanner {
          *
          * @param symbol Found symbol image.
          */
-        void onNewSymbol(MutableImage symbol);
+        void onNewSymbol(MutableImage symbol, int x, int y);
 
         /**
          * This method is invoked when a whitespace is detected.

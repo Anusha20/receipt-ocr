@@ -26,7 +26,7 @@ public class SimpleImageScanner implements ImageScanner {
                     if (!isFirstLine) {
                         callback.onNewLine();
                     }
-                    parseLine(image.subImage(0, lineTop, image.width, i - lineTop), callback);
+                    parseLine(image.subImage(0, lineTop, image.width, i - lineTop), lineTop, callback);
                     isFirstLine = false;
                     isWhitespaceNow = true;
                 }
@@ -39,14 +39,14 @@ public class SimpleImageScanner implements ImageScanner {
         }
     }
 
-    private void parseLine(MutableImage image, Callback callback) {
+    private void parseLine(MutableImage image, int lineTop, Callback callback) {
         boolean isWhitespaceNow = true;
         boolean hadSymbol = false;
         int symbolLeft = -1;
         for (int x = 0, topPos = image.firstPixel; x < image.width; x++, topPos++) {
             if (isWhitespaceColumn(image, topPos)) {
                 if (!isWhitespaceNow) {
-                    callback.onNewSymbol(image.subImage(symbolLeft, 0, x - symbolLeft, image.height));
+                    callback.onNewSymbol(image.subImage(symbolLeft, 0, x - symbolLeft, image.height), symbolLeft, lineTop);
                     hadSymbol = true;
                     symbolLeft = x;
                     isWhitespaceNow = true;

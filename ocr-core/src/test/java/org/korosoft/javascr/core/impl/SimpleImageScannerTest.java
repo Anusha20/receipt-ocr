@@ -23,7 +23,7 @@ public class SimpleImageScannerTest {
                 lineCount.incrementAndGet();
             }
 
-            public void onNewSymbol(MutableImage symbol) {
+            public void onNewSymbol(MutableImage symbol, int x, int y) {
                 symbolCount.incrementAndGet();
             }
 
