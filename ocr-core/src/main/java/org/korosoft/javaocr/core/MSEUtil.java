@@ -2,6 +2,9 @@ package org.korosoft.javaocr.core;
 
 /**
  * Mean square error comparator for {@link MutableImage} instances.
+ *
+ * @author Dmitry Korotkov
+ * @since 1.0
  */
 public final class MSEUtil {
     /**
@@ -31,15 +34,9 @@ public final class MSEUtil {
                     for (int x1 = 0; x1 < i1.width; x1++) {
                         int y2 = y1 * i2.height / i1.height;
                         int x2 = x1 * i2.width / i1.width;
-                        int p2 = i2.firstPixel + (i2.width + i2.lineSpan) * y2 + x2;
-                        int v1 = i1.pixels[p1];
-                        int v2 = i2.pixels[p2];
-                        if (v1 < 0) {
-                            v1 += 256;
-                        }
-                        if (v2 < 0) {
-                            v2 += 256;
-                        }
+                        int p2 = i2.firstPixel + i2.fullLine * y2 + x2;
+                        int v1 = (int) i1.pixels[p1] & 0xff;
+                        int v2 = (int) i2.pixels[p2] & 0xff;
                         squareError += (v1 - v2) * (v1 - v2);
                         numPixels++;
                         p1++;
@@ -52,16 +49,10 @@ public final class MSEUtil {
                     for (int x1 = 0; x1 < i1.width; x1++) {
                         int x2 = x1 * i2.width / i1.width;
                         int y1 = y2 * i1.height / i2.height;
-                        int p1 = i1.firstPixel + (i1.width + i1.lineSpan) * y1 + x1;
-                        int p2 = i2.firstPixel + (i2.width + i2.lineSpan) * y2 + x2;
-                        int v1 = i1.pixels[p1];
-                        int v2 = i2.pixels[p2];
-                        if (v1 < 0) {
-                            v1 += 256;
-                        }
-                        if (v2 < 0) {
-                            v2 += 256;
-                        }
+                        int p1 = i1.firstPixel + i1.fullLine * y1 + x1;
+                        int p2 = i2.firstPixel + i2.fullLine * y2 + x2;
+                        int v1 = (int) i1.pixels[p1] & 0xff;
+                        int v2 = (int) i2.pixels[p2] & 0xff;
                         squareError += (v1 - v2) * (v1 - v2);
                         numPixels++;
                     }
@@ -75,15 +66,9 @@ public final class MSEUtil {
                     for (int x2 = 0; x2 < i2.width; x2++) {
                         int y1 = y2 * i1.height / i2.height;
                         int x1 = x2 * i1.width / i2.width;
-                        int p1 = i1.firstPixel + (i1.width + i1.lineSpan) * y1 + x1;
-                        int v2 = i2.pixels[p2];
-                        int v1 = i1.pixels[p1];
-                        if (v2 < 0) {
-                            v2 += 256;
-                        }
-                        if (v1 < 0) {
-                            v1 += 256;
-                        }
+                        int p1 = i1.firstPixel + i1.fullLine * y1 + x1;
+                        int v1 = (int) i1.pixels[p1] & 0xff;
+                        int v2 = (int) i2.pixels[p2] & 0xff;
                         squareError += (v2 - v1) * (v2 - v1);
                         numPixels++;
                         p2++;
@@ -96,16 +81,10 @@ public final class MSEUtil {
                     for (int x2 = 0; x2 < i2.width; x2++) {
                         int x1 = x2 * i1.width / i2.width;
                         int y2 = y1 * i2.height / i1.height;
-                        int p2 = i2.firstPixel + (i2.width + i2.lineSpan) * y2 + x2;
-                        int p1 = i1.firstPixel + (i1.width + i1.lineSpan) * y1 + x1;
-                        int v2 = i2.pixels[p2];
-                        int v1 = i1.pixels[p1];
-                        if (v2 < 0) {
-                            v2 += 256;
-                        }
-                        if (v1 < 0) {
-                            v1 += 256;
-                        }
+                        int p2 = i2.firstPixel + i2.fullLine * y2 + x2;
+                        int p1 = i1.firstPixel + i1.fullLine * y1 + x1;
+                        int v1 = (int) i1.pixels[p1] & 0xff;
+                        int v2 = (int) i2.pixels[p2] & 0xff;
                         squareError += (v2 - v1) * (v2 - v1);
                         numPixels++;
                     }
@@ -142,15 +121,9 @@ public final class MSEUtil {
                     for (int x2 = 0; x2 < i2.width; x2++) {
                         int y1 = y2 * i1.height / i2.height;
                         int x1 = x2 * i1.width / i2.width;
-                        int p1 = i1.firstPixel + (i1.width + i1.lineSpan) * y1 + x1;
-                        int v2 = i2.pixels[p2];
-                        int v1 = i1.pixels[p1];
-                        if (v2 < 0) {
-                            v2 += 256;
-                        }
-                        if (v1 < 0) {
-                            v1 += 256;
-                        }
+                        int p1 = i1.firstPixel + i1.fullLine * y1 + x1;
+                        int v1 = (int) i1.pixels[p1] & 0xff;
+                        int v2 = (int) i2.pixels[p2] & 0xff;
                         squareError += (v2 - v1) * (v2 - v1);
                         numPixels++;
                         p2++;
@@ -163,16 +136,10 @@ public final class MSEUtil {
                     for (int x2 = 0; x2 < i2.width; x2++) {
                         int x1 = x2 * i1.width / i2.width;
                         int y2 = y1 * i2.height / i1.height;
-                        int p2 = i2.firstPixel + (i2.width + i2.lineSpan) * y2 + x2;
-                        int p1 = i1.firstPixel + (i1.width + i1.lineSpan) * y1 + x1;
-                        int v2 = i2.pixels[p2];
-                        int v1 = i1.pixels[p1];
-                        if (v2 < 0) {
-                            v2 += 256;
-                        }
-                        if (v1 < 0) {
-                            v1 += 256;
-                        }
+                        int p2 = i2.firstPixel + i2.fullLine * y2 + x2;
+                        int p1 = i1.firstPixel + i1.fullLine * y1 + x1;
+                        int v1 = (int) i1.pixels[p1] & 0xff;
+                        int v2 = (int) i2.pixels[p2] & 0xff;
                         squareError += (v2 - v1) * (v2 - v1);
                         numPixels++;
                     }
@@ -186,15 +153,9 @@ public final class MSEUtil {
                     for (int x1 = 0; x1 < i1.width; x1++) {
                         int y2 = y1 * i2.height / i1.height;
                         int x2 = x1 * i2.width / i1.width;
-                        int p2 = i2.firstPixel + (i2.width + i2.lineSpan) * y2 + x2;
-                        int v1 = i1.pixels[p1];
-                        int v2 = i2.pixels[p2];
-                        if (v1 < 0) {
-                            v1 += 256;
-                        }
-                        if (v2 < 0) {
-                            v2 += 256;
-                        }
+                        int p2 = i2.firstPixel + i2.fullLine * y2 + x2;
+                        int v1 = (int) i1.pixels[p1] & 0xff;
+                        int v2 = (int) i2.pixels[p2] & 0xff;
                         squareError += (v1 - v2) * (v1 - v2);
                         numPixels++;
                         p1++;
@@ -207,16 +168,10 @@ public final class MSEUtil {
                     for (int x1 = 0; x1 < i1.width; x1++) {
                         int x2 = x1 * i2.width / i1.width;
                         int y1 = y2 * i1.height / i2.height;
-                        int p1 = i1.firstPixel + (i1.width + i1.lineSpan) * y1 + x1;
-                        int p2 = i2.firstPixel + (i2.width + i2.lineSpan) * y2 + x2;
-                        int v1 = i1.pixels[p1];
-                        int v2 = i2.pixels[p2];
-                        if (v1 < 0) {
-                            v1 += 256;
-                        }
-                        if (v2 < 0) {
-                            v2 += 256;
-                        }
+                        int p1 = i1.firstPixel + i1.fullLine * y1 + x1;
+                        int p2 = i2.firstPixel + i2.fullLine * y2 + x2;
+                        int v1 = (int) i1.pixels[p1] & 0xff;
+                        int v2 = (int) i2.pixels[p2] & 0xff;
                         squareError += (v1 - v2) * (v1 - v2);
                         numPixels++;
                     }

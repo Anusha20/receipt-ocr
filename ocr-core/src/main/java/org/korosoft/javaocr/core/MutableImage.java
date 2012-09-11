@@ -69,6 +69,11 @@ public class MutableImage {
     public final int height;
 
     /**
+     * Number of bytes between beginnings of two adjacent lines. Always equals to {@link #lineSpan} + {@link #width}
+     */
+    public final int fullLine;
+
+    /**
      * Creates new MutableImage instance.
      *
      * @param pixels     Grayscale pixels array (see {@link MutableImage#pixels})
@@ -87,6 +92,7 @@ public class MutableImage {
         this.lineSpan = lineSpan;
         this.width = width;
         this.height = height;
+        this.fullLine = lineSpan + width;
     }
 
     /**
@@ -154,7 +160,7 @@ public class MutableImage {
         int pos = firstPixel;
         for (int y = 0; y < height; y++) {
             System.arraycopy(pixels, pos, newPixels, newPos, width);
-            pos += width + lineSpan;
+            pos += fullLine;
             newPos += width;
         }
         return new MutableImage(newPixels, 0, 0, width, height);
