@@ -46,5 +46,10 @@ public interface ImageScanner {
          * @param width      width of the whitespace in pixels.
          */
         void onWhitespace(int lineHeight, int width);
+
+        /**
+         * This method is invoked when the scan is finished (just before {@link ImageScanner#scan(org.korosoft.javaocr.core.MutableImage, org.korosoft.javaocr.core.api.ImageScanner.Callback)} returns).
+         */
+        void onFinished();
     }
 }

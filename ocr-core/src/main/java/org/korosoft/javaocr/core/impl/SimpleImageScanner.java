@@ -37,6 +37,7 @@ public class SimpleImageScanner implements ImageScanner {
                 }
             }
         }
+        callback.onFinished();
     }
 
     private void parseLine(MutableImage image, int lineTop, Callback callback) {
