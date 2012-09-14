@@ -41,6 +41,28 @@ public final class ImgUtil {
         return new MutableImage(pixels, 0, 0, w, h);
     }
 
+    public static String imageToText(MutableImage image) {
+        StringBuilder builder = new StringBuilder((image.width + 1) * image.height);
+        char pseudo[] = "█▓▒░▪◦·".toCharArray();
+        int p = image.firstPixel;
+        for (int y = 0; y < image.height; y++) {
+            for (int x = 0; x < image.width; x++) {
+                int i = (int) image.pixels[p] & 255 / (255 / pseudo.length);
+                if (i < 0) {
+                    i = 0;
+                }
+                if (i >= pseudo.length) {
+                    i = pseudo.length - 1;
+                }
+                builder.append(pseudo[i]);
+                p++;
+            }
+            builder.append("\n");
+            p += image.lineSpan;
+        }
+        return builder.toString();
+    }
+
     /**
      * Private constructor prevents instantiation
      */
