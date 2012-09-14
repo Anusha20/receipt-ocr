@@ -28,14 +28,17 @@ public class SimpleImageScannerTest {
             }
 
             public void onWhitespace(int lineHeight, int width) {
-                if (width > 4) {
+                if ((double) width / (double)lineHeight > 0.2) {
                     whitespaceCount.incrementAndGet();
                 }
             }
+
+            public void onFinished() {
+            }
         });
         Assert.assertEquals("Line count", 4, lineCount.get());
-        Assert.assertEquals("Symbol count", 61, symbolCount.get());
-        Assert.assertEquals("Whitespace count", 7, whitespaceCount.get());
+        Assert.assertEquals("Symbol count", 68, symbolCount.get());
+        Assert.assertEquals("Whitespace count", 8, whitespaceCount.get());
     }
 
 }
