@@ -27,67 +27,36 @@ public final class MSEUtil {
         }
         // Iterate through larger dimensions for better accuracy
         if (i1.width > i2.width) {
-            if (i1.height >= i2.height) {
-                // i1 is wider and taller
-                int p1 = i1.firstPixel;
-                for (int y1 = 0; y1 < i1.height; y1++) {
-                    for (int x1 = 0; x1 < i1.width; x1++) {
-                        int y2 = y1 * i2.height / i1.height;
-                        int x2 = x1 * i2.width / i1.width;
-                        int p2 = i2.firstPixel + i2.fullLine * y2 + x2;
-                        int v1 = (int) i1.pixels[p1] & 0xff;
-                        int v2 = (int) i2.pixels[p2] & 0xff;
-                        squareError += (v1 - v2) * (v1 - v2);
-                        numPixels++;
-                        p1++;
-                    }
-                    p1 += i1.lineSpan;
+            return compareSlow(i2, i1);
+        }
+        if (i2.height >= i1.height) {
+            // i2 is wider and taller
+            int p2 = i2.firstPixel;
+            for (int y2 = 0; y2 < i2.height; y2++) {
+                for (int x2 = 0; x2 < i2.width; x2++) {
+                    int y1 = y2 * i1.height / i2.height;
+                    int x1 = x2 * i1.width / i2.width;
+                    int p1 = i1.firstPixel + i1.fullLine * y1 + x1;
+                    int v1 = (int) i1.pixels[p1] & 0xff;
+                    int v2 = (int) i2.pixels[p2] & 0xff;
+                    squareError += (v2 - v1) * (v2 - v1);
+                    numPixels++;
+                    p2++;
                 }
-            } else {
-                // i1 is wider but i2 is taller
-                for (int y2 = 0; y2 < i2.height; y2++) {
-                    for (int x1 = 0; x1 < i1.width; x1++) {
-                        int x2 = x1 * i2.width / i1.width;
-                        int y1 = y2 * i1.height / i2.height;
-                        int p1 = i1.firstPixel + i1.fullLine * y1 + x1;
-                        int p2 = i2.firstPixel + i2.fullLine * y2 + x2;
-                        int v1 = (int) i1.pixels[p1] & 0xff;
-                        int v2 = (int) i2.pixels[p2] & 0xff;
-                        squareError += (v1 - v2) * (v1 - v2);
-                        numPixels++;
-                    }
-                }
+                p2 += i2.lineSpan;
             }
         } else {
-            if (i2.height >= i1.height) {
-                // i2 is wider and taller
-                int p2 = i2.firstPixel;
-                for (int y2 = 0; y2 < i2.height; y2++) {
-                    for (int x2 = 0; x2 < i2.width; x2++) {
-                        int y1 = y2 * i1.height / i2.height;
-                        int x1 = x2 * i1.width / i2.width;
-                        int p1 = i1.firstPixel + i1.fullLine * y1 + x1;
-                        int v1 = (int) i1.pixels[p1] & 0xff;
-                        int v2 = (int) i2.pixels[p2] & 0xff;
-                        squareError += (v2 - v1) * (v2 - v1);
-                        numPixels++;
-                        p2++;
-                    }
-                    p2 += i2.lineSpan;
-                }
-            } else {
-                // i2 is wider but i1 is taller 
-                for (int y1 = 0; y1 < i1.height; y1++) {
-                    for (int x2 = 0; x2 < i2.width; x2++) {
-                        int x1 = x2 * i1.width / i2.width;
-                        int y2 = y1 * i2.height / i1.height;
-                        int p2 = i2.firstPixel + i2.fullLine * y2 + x2;
-                        int p1 = i1.firstPixel + i1.fullLine * y1 + x1;
-                        int v1 = (int) i1.pixels[p1] & 0xff;
-                        int v2 = (int) i2.pixels[p2] & 0xff;
-                        squareError += (v2 - v1) * (v2 - v1);
-                        numPixels++;
-                    }
+            // i2 is wider but i1 is taller
+            for (int y1 = 0; y1 < i1.height; y1++) {
+                for (int x2 = 0; x2 < i2.width; x2++) {
+                    int x1 = x2 * i1.width / i2.width;
+                    int y2 = y1 * i2.height / i1.height;
+                    int p2 = i2.firstPixel + i2.fullLine * y2 + x2;
+                    int p1 = i1.firstPixel + i1.fullLine * y1 + x1;
+                    int v1 = (int) i1.pixels[p1] & 0xff;
+                    int v2 = (int) i2.pixels[p2] & 0xff;
+                    squareError += (v2 - v1) * (v2 - v1);
+                    numPixels++;
                 }
             }
         }
@@ -114,67 +83,36 @@ public final class MSEUtil {
         }
         // Iterate through larger dimensions for better accuracy
         if (i1.width > i2.width) {
-            if (i1.height >= i2.height) {
-                // i1 is wider and taller
-                int p2 = i2.firstPixel;
-                for (int y2 = 0; y2 < i2.height; y2++) {
-                    for (int x2 = 0; x2 < i2.width; x2++) {
-                        int y1 = y2 * i1.height / i2.height;
-                        int x1 = x2 * i1.width / i2.width;
-                        int p1 = i1.firstPixel + i1.fullLine * y1 + x1;
-                        int v1 = (int) i1.pixels[p1] & 0xff;
-                        int v2 = (int) i2.pixels[p2] & 0xff;
-                        squareError += (v2 - v1) * (v2 - v1);
-                        numPixels++;
-                        p2++;
-                    }
-                    p2 += i2.lineSpan;
+            return compareFast(i2, i1);
+        }
+        if (i2.height >= i1.height) {
+            // i2 is wider and taller
+            int p1 = i1.firstPixel;
+            for (int y1 = 0; y1 < i1.height; y1++) {
+                for (int x1 = 0; x1 < i1.width; x1++) {
+                    int y2 = y1 * i2.height / i1.height;
+                    int x2 = x1 * i2.width / i1.width;
+                    int p2 = i2.firstPixel + i2.fullLine * y2 + x2;
+                    int v1 = (int) i1.pixels[p1] & 0xff;
+                    int v2 = (int) i2.pixels[p2] & 0xff;
+                    squareError += (v1 - v2) * (v1 - v2);
+                    numPixels++;
+                    p1++;
                 }
-            } else {
-                // i1 is wider but i2 is taller
-                for (int y1 = 0; y1 < i1.height; y1++) {
-                    for (int x2 = 0; x2 < i2.width; x2++) {
-                        int x1 = x2 * i1.width / i2.width;
-                        int y2 = y1 * i2.height / i1.height;
-                        int p2 = i2.firstPixel + i2.fullLine * y2 + x2;
-                        int p1 = i1.firstPixel + i1.fullLine * y1 + x1;
-                        int v1 = (int) i1.pixels[p1] & 0xff;
-                        int v2 = (int) i2.pixels[p2] & 0xff;
-                        squareError += (v2 - v1) * (v2 - v1);
-                        numPixels++;
-                    }
-                }
+                p1 += i1.lineSpan;
             }
         } else {
-            if (i2.height >= i1.height) {
-                // i2 is wider and taller
-                int p1 = i1.firstPixel;
-                for (int y1 = 0; y1 < i1.height; y1++) {
-                    for (int x1 = 0; x1 < i1.width; x1++) {
-                        int y2 = y1 * i2.height / i1.height;
-                        int x2 = x1 * i2.width / i1.width;
-                        int p2 = i2.firstPixel + i2.fullLine * y2 + x2;
-                        int v1 = (int) i1.pixels[p1] & 0xff;
-                        int v2 = (int) i2.pixels[p2] & 0xff;
-                        squareError += (v1 - v2) * (v1 - v2);
-                        numPixels++;
-                        p1++;
-                    }
-                    p1 += i1.lineSpan;
-                }
-            } else {
-                // i2 is wider but i1 is taller
-                for (int y2 = 0; y2 < i2.height; y2++) {
-                    for (int x1 = 0; x1 < i1.width; x1++) {
-                        int x2 = x1 * i2.width / i1.width;
-                        int y1 = y2 * i1.height / i2.height;
-                        int p1 = i1.firstPixel + i1.fullLine * y1 + x1;
-                        int p2 = i2.firstPixel + i2.fullLine * y2 + x2;
-                        int v1 = (int) i1.pixels[p1] & 0xff;
-                        int v2 = (int) i2.pixels[p2] & 0xff;
-                        squareError += (v1 - v2) * (v1 - v2);
-                        numPixels++;
-                    }
+            // i2 is wider but i1 is taller
+            for (int y2 = 0; y2 < i2.height; y2++) {
+                for (int x1 = 0; x1 < i1.width; x1++) {
+                    int x2 = x1 * i2.width / i1.width;
+                    int y1 = y2 * i1.height / i2.height;
+                    int p1 = i1.firstPixel + i1.fullLine * y1 + x1;
+                    int p2 = i2.firstPixel + i2.fullLine * y2 + x2;
+                    int v1 = (int) i1.pixels[p1] & 0xff;
+                    int v2 = (int) i2.pixels[p2] & 0xff;
+                    squareError += (v1 - v2) * (v1 - v2);
+                    numPixels++;
                 }
             }
         }
