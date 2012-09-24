@@ -9,5 +9,5 @@ import org.korosoft.javaocr.core.MutableImage;
  * @since 1.0
  */
 public interface ImageComparator {
-    double compareImages(MutableImage image1, MutableImage image2);
+    double compareImages(MutableImage image1, int baseLine1, MutableImage image2, int baseLine2);
 }

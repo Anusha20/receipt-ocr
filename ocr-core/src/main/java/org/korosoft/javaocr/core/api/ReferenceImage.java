@@ -24,6 +24,13 @@ public interface ReferenceImage {
     MutableImage getImage();
 
     /**
+     * Returns symbol base line.
+     *
+     * @return symbol base line.
+     */
+    int getBaseLine();
+
+    /**
      * Returns number of correct symbol detections made.
      *
      * @return number of correct symbol detections made.

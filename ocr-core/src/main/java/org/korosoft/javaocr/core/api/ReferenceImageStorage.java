@@ -21,7 +21,8 @@ public interface ReferenceImageStorage {
     /**
      * Registers new reference image. New reference image should have correct detections count and all detections count equal to 1.
      *
-     * @param image Image to register.
+     * @param image    Image to register.
+     * @param baseLine Image base line.
      */
-    ReferenceImage addReferenceImage(MutableImage image, char symbol);
+    ReferenceImage addReferenceImage(MutableImage image, char symbol, int baseLine);
 }

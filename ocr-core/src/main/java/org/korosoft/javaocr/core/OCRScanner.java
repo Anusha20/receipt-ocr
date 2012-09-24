@@ -45,15 +45,15 @@ public class OCRScanner {
                 }
             }
 
-            public void onNewSymbol(MutableImage symbol, int x, int y) {
-                currentWord.add(processIncomingSymbol(symbol, x, y));
+            public void onNewSymbol(MutableImage symbol, int x, int y, int baseLine) {
+                currentWord.add(processIncomingSymbol(symbol, x, y, baseLine));
             }
 
-            private RecognizedSymbol processIncomingSymbol(MutableImage symbol, int x, int y) {
+            private RecognizedSymbol processIncomingSymbol(MutableImage symbol, int x, int y, int baseLine) {
                 double bestMatchScore = 0;
                 ReferenceImage bestMatchImage = null;
                 for (ReferenceImage referenceImage : allReferenceImages) {
-                    double imageScore = imageComparator.compareImages(referenceImage.getImage(), symbol);
+                    double imageScore = imageComparator.compareImages(referenceImage.getImage(), referenceImage.getBaseLine(), symbol, baseLine);
                     if (imageScore < settings.symbolRecognitionThreshold) {
                         bestMatchScore = imageScore;
                         bestMatchImage = referenceImage;
@@ -62,7 +62,7 @@ public class OCRScanner {
                         }
                     }
                 }
-                return new RecognizedSymbol(symbol, x, y, bestMatchImage == null ? null : bestMatchImage.getSymbol(), bestMatchScore);
+                return new RecognizedSymbol(symbol, x, y, baseLine, bestMatchImage == null ? null : bestMatchImage.getSymbol(), bestMatchScore);
             }
 
             public void onWhitespace(int lineHeight, int width) {
@@ -88,15 +88,17 @@ public class OCRScanner {
         public final MutableImage image;
         public final int x;
         public final int y;
+        public final int baseLine;
         public final Character symbol;
         public final double score;
 
-        private RecognizedSymbol(MutableImage image, int x, int y, Character symbol, double score) {
+        private RecognizedSymbol(MutableImage image, int x, int y, int baseLine, Character symbol, double score) {
             this.image = image;
             this.x = x;
             this.y = y;
             this.symbol = symbol;
             this.score = score;
+            this.baseLine = baseLine;
         }
     }
 

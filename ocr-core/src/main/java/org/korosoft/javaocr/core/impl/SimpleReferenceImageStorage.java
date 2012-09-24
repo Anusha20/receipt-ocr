@@ -25,23 +25,25 @@ public class SimpleReferenceImageStorage implements ReferenceImageStorage {
         return new ArrayList<ReferenceImage>(images);
     }
 
-    public ReferenceImage addReferenceImage(MutableImage image, char symbol) {
-        ReferenceImage r = new ReferenceImageImpl(image, symbol, 1, 1);
+    public ReferenceImage addReferenceImage(MutableImage image, char symbol, int baseLine) {
+        ReferenceImage r = new ReferenceImageImpl(image, symbol, baseLine, 1, 1);
         images.add(r);
         return r;
     }
 
     private class ReferenceImageImpl implements ReferenceImage {
-        final MutableImage image;
-        final char symbol;
-        int correctDetections;
-        int allDetections;
+        private final MutableImage image;
+        private final char symbol;
+        private final int baseLine;
+        private int correctDetections;
+        private int allDetections;
 
-        private ReferenceImageImpl(MutableImage image, char symbol, int correctDetections, int allDetections) {
+        private ReferenceImageImpl(MutableImage image, char symbol, int baseLine, int correctDetections, int allDetections) {
             this.image = image;
             this.symbol = symbol;
             this.correctDetections = correctDetections;
             this.allDetections = allDetections;
+            this.baseLine = baseLine;
         }
 
         public char getSymbol() {
@@ -50,6 +52,10 @@ public class SimpleReferenceImageStorage implements ReferenceImageStorage {
 
         public MutableImage getImage() {
             return image;
+        }
+
+        public int getBaseLine() {
+            return baseLine;
         }
 
         public int getCorrectDetections() {
