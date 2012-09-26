@@ -53,8 +53,8 @@ public class MSEUtilTest {
 
         // sub-images should contain the same pixels
 
-        Assert.assertTrue("Square error for fast compare of different images shold correspond the difference", MSEUtil.compareFast(subImage1, subImage2).squareError < MSEUtil.compareFast(subImage1, subImage3).squareError);
-        Assert.assertTrue("Square error for slow compare of different images shold correspond the difference", MSEUtil.compareSlow(subImage1, subImage2).squareError < MSEUtil.compareSlow(subImage1, subImage3).squareError);
+        Assert.assertTrue("Square error for fast compare of different images should correspond the difference", MSEUtil.compareFast(subImage1, subImage2).squareError < MSEUtil.compareFast(subImage1, subImage3).squareError);
+        Assert.assertTrue("Square error for slow compare of different images should correspond the difference", MSEUtil.compareSlow(subImage1, subImage2).squareError < MSEUtil.compareSlow(subImage1, subImage3).squareError);
     }
 
     @Test

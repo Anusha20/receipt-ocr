@@ -89,10 +89,10 @@ public class OCRScanner {
         public final int x;
         public final int y;
         public final int baseLine;
-        public final Character symbol;
+        public final String symbol;
         public final double score;
 
-        private RecognizedSymbol(MutableImage image, int x, int y, int baseLine, Character symbol, double score) {
+        private RecognizedSymbol(MutableImage image, int x, int y, int baseLine, String symbol, double score) {
             this.image = image;
             this.x = x;
             this.y = y;

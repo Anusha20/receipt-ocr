@@ -43,13 +43,13 @@ public class OCRScannerTest {
         Assert.assertEquals("Number of symbols in 3rd word in 1st line", 4, scan.get(0).get(2).size());
 
         OCRScanner.RecognizedSymbol letter_t = scan.get(0).get(2).get(3);
-        referenceImageStorage.addReferenceImage(letter_t.image, 't', letter_t.baseLine);
+        referenceImageStorage.addReferenceImage(letter_t.image, "t", letter_t.baseLine);
         List<List<List<OCRScanner.RecognizedSymbol>>> scan2 = scanner.scan(image);
         int t_count = 0;
         for (List<List<OCRScanner.RecognizedSymbol>> line : scan2) {
             for (List<OCRScanner.RecognizedSymbol> word : line) {
                 for (OCRScanner.RecognizedSymbol symbol : word) {
-                    if (symbol.symbol != null && symbol.symbol.equals('t')) {
+                    if (symbol.symbol != null && symbol.symbol.equals("t")) {
                         t_count++;
                     }
                 }
@@ -80,13 +80,13 @@ public class OCRScannerTest {
         Assert.assertEquals("Number of symbols in 3rd word in 1st line", 4, scan.get(0).get(2).size());
 
         OCRScanner.RecognizedSymbol letter_t = scan.get(0).get(2).get(3);
-        referenceImageStorage.addReferenceImage(letter_t.image, 't', letter_t.baseLine);
+        referenceImageStorage.addReferenceImage(letter_t.image, "t", letter_t.baseLine);
         List<List<List<OCRScanner.RecognizedSymbol>>> scan2 = scanner.scan(image);
         int t_count = 0;
         for (List<List<OCRScanner.RecognizedSymbol>> line : scan2) {
             for (List<OCRScanner.RecognizedSymbol> word : line) {
                 for (OCRScanner.RecognizedSymbol symbol : word) {
-                    if (symbol.symbol != null && symbol.symbol.equals('t')) {
+                    if (symbol.symbol != null && symbol.symbol.equals("t")) {
                         t_count++;
                     }
                 }

@@ -14,7 +14,7 @@ public interface ReferenceImage {
      *
      * @return symbol shown on the reference image.
      */
-    char getSymbol();
+    String getSymbol();
 
     /**
      * Returns reference image.
