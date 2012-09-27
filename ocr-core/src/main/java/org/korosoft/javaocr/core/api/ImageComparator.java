@@ -3,7 +3,7 @@ package org.korosoft.javaocr.core.api;
 import org.korosoft.javaocr.core.MutableImage;
 
 /**
- * ImageComparator defines image comparator tool for {@link org.korosoft.javaocr.core.OCRScanner} class.
+ * ImageComparator defines image comparator tool for {@link org.korosoft.javaocr.core.impl.OCRScanner} class.
  *
  * @author Dmitry Korotkov
  * @since 1.0

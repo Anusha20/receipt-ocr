@@ -41,6 +41,12 @@ public final class ImgUtil {
         return new MutableImage(pixels, 0, 0, w, h);
     }
 
+    /**
+     * Converts image to printable text. Handy for debugging.
+     *
+     * @param image Image to convert.
+     * @return ASCII image representation.
+     */
     public static String imageToText(MutableImage image) {
         StringBuilder builder = new StringBuilder((image.width + 1) * image.height);
         char pseudo[] = "█▓▒░▪◦·".toCharArray();

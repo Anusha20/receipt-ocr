@@ -13,13 +13,14 @@ import java.util.*;
  * @since 1.0
  */
 public class SimpleReferenceImageStorage implements ReferenceImageStorage {
-    Set<ReferenceImage> images = new TreeSet<ReferenceImage>(new Comparator<ReferenceImage>() {
-        public int compare(ReferenceImage o1, ReferenceImage o2) {
-            double x1 = (double) o1.getCorrectDetections() / (double) o1.getAllDetections();
-            double x2 = (double) o2.getCorrectDetections() / (double) o2.getAllDetections();
-            return x1 < x2 ? 1 : x1 == x2 ? 0 : -1;
-        }
-    });
+    List<ReferenceImage> images = new ArrayList<ReferenceImage>();
+//    Set<ReferenceImage> images = new TreeSet<ReferenceImage>(new Comparator<ReferenceImage>() {
+//        public int compare(ReferenceImage o1, ReferenceImage o2) {
+//            double x1 = (double) o1.getCorrectDetections() / (double) o1.getAllDetections();
+//            double x2 = (double) o2.getCorrectDetections() / (double) o2.getAllDetections();
+//            return x1 < x2 ? 1 : x1 == x2 ? 0 : -1;
+//        }
+//    });
 
     public List<ReferenceImage> getAllReferenceImages() {
         return new ArrayList<ReferenceImage>(images);

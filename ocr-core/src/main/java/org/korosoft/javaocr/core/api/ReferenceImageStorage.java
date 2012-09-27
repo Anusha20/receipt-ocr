@@ -5,7 +5,7 @@ import org.korosoft.javaocr.core.MutableImage;
 import java.util.List;
 
 /**
- * ReferenceImageStorage defines abstract reference image storage for {@link org.korosoft.javaocr.core.OCRScanner} class.
+ * ReferenceImageStorage defines abstract reference image storage for {@link org.korosoft.javaocr.core.impl.OCRScanner} class.
  *
  * @author Dmitry Korotkov
  * @since 1.0

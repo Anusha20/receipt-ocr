@@ -3,7 +3,7 @@ package org.korosoft.javaocr.core.api;
 import org.korosoft.javaocr.core.MutableImage;
 
 /**
- * ReferenceImage defines reference image for {@link org.korosoft.javaocr.core.OCRScanner} class.
+ * ReferenceImage defines reference image for {@link org.korosoft.javaocr.core.impl.OCRScanner} class.
  *
  * @author Dmitry Korotkov
  * @since 1.0

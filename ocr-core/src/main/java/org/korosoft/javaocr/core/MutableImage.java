@@ -42,7 +42,7 @@ package org.korosoft.javaocr.core;
  * @author Dmitry Korotkov
  * @since 1.0
  */
-public class MutableImage {
+public final class MutableImage {
     /**
      * Container for grayscale pixels of the image. Different images can share the same pixel container. Please read
      * documentation for {@link MutableImage#firstPixel} and {@link MutableImage#lineSpan} fields before you use this field.

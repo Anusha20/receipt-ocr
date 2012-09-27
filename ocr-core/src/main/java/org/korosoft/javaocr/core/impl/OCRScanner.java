@@ -1,9 +1,7 @@
-package org.korosoft.javaocr.core;
+package org.korosoft.javaocr.core.impl;
 
-import org.korosoft.javaocr.core.api.ImageComparator;
-import org.korosoft.javaocr.core.api.ImageScanner;
-import org.korosoft.javaocr.core.api.ReferenceImage;
-import org.korosoft.javaocr.core.api.ReferenceImageStorage;
+import org.korosoft.javaocr.core.MutableImage;
+import org.korosoft.javaocr.core.api.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,9 +16,9 @@ public class OCRScanner {
     private final ImageScanner imageScanner;
     private final ReferenceImageStorage referenceImageStorage;
     private final ImageComparator imageComparator;
-    private final Settings settings;
+    private final RecognitionSettings settings;
 
-    public OCRScanner(ImageScanner imageScanner, ReferenceImageStorage referenceImageStorage, ImageComparator imageComparator, Settings settings) {
+    public OCRScanner(ImageScanner imageScanner, ReferenceImageStorage referenceImageStorage, ImageComparator imageComparator, RecognitionSettings settings) {
         this.imageScanner = imageScanner;
         this.referenceImageStorage = referenceImageStorage;
         this.imageComparator = imageComparator;
@@ -62,7 +60,7 @@ public class OCRScanner {
                         }
                     }
                 }
-                return new RecognizedSymbol(symbol, x, y, baseLine, bestMatchImage == null ? null : bestMatchImage.getSymbol(), bestMatchScore);
+                return new RecognizedSymbol(symbol, x, y, baseLine, bestMatchImage, bestMatchScore);
             }
 
             public void onWhitespace(int lineHeight, int width) {
@@ -84,33 +82,4 @@ public class OCRScanner {
         return lines;
     }
 
-    public static class RecognizedSymbol {
-        public final MutableImage image;
-        public final int x;
-        public final int y;
-        public final int baseLine;
-        public final String symbol;
-        public final double score;
-
-        private RecognizedSymbol(MutableImage image, int x, int y, int baseLine, String symbol, double score) {
-            this.image = image;
-            this.x = x;
-            this.y = y;
-            this.symbol = symbol;
-            this.score = score;
-            this.baseLine = baseLine;
-        }
-    }
-
-    public static class Settings {
-        public final double symbolRecognitionThreshold;
-        public final double whiteSpaceThreshold;
-        public final double exactMatchThreshold;
-
-        public Settings(double symbolRecognitionThreshold, double whiteSpaceThreshold, double exactMatchThreshold) {
-            this.symbolRecognitionThreshold = symbolRecognitionThreshold;
-            this.whiteSpaceThreshold = whiteSpaceThreshold;
-            this.exactMatchThreshold = exactMatchThreshold;
-        }
-    }
 }
