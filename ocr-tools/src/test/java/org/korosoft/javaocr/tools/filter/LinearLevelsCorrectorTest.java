@@ -15,7 +15,7 @@ public class LinearLevelsCorrectorTest {
     @Test
     public void testLevelsCorrector() throws Exception {
         final LinearLevelsCorrector levelsCorrector = new LinearLevelsCorrector();
-        final MutableImage image = ImgUtil.readMutableImageFromSupportedStream(getClass().getResourceAsStream("/test-rotated.png"));
+        final MutableImage image = ImgUtil.readMutableImageFromSupportedStream(getClass().getResourceAsStream("/test-rotated-l.png"));
         levelsCorrector.doFilter(image);
 
         int p = image.firstPixel;

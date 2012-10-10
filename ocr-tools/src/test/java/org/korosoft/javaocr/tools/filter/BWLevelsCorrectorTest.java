@@ -15,7 +15,7 @@ public class BWLevelsCorrectorTest {
     @Test
     public void testLevelsCorrector() throws Exception {
         final BWLevelsCorrector levelsCorrector = new BWLevelsCorrector();
-        final MutableImage image = ImgUtil.readMutableImageFromSupportedStream(getClass().getResourceAsStream("/test-rotated.png"));
+        final MutableImage image = ImgUtil.readMutableImageFromSupportedStream(getClass().getResourceAsStream("/test-rotated-l.png"));
         levelsCorrector.doFilter(image);
 
         int p = image.firstPixel;

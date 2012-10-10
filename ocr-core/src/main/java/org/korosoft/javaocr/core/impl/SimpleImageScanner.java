@@ -119,7 +119,7 @@ public class SimpleImageScanner implements ImageScanner {
         return score;
     }
 
-    public class Settings {
+    public static class Settings {
         /**
          * White color lower threshold. All colors with color greater than {@code whiteThreshold} are considered
          * to be 100% white (equal to 255)
