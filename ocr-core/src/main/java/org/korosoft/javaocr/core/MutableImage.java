@@ -165,4 +165,17 @@ public final class MutableImage {
         }
         return new MutableImage(newPixels, 0, 0, width, height);
     }
+
+    /**
+     * Calculates pixel index in {@link #pixels} array by coordinates. Do not use this method when iterating through pixels. Increment the index
+     * as described in {@link MutableImage} class JavaDoc.
+     *
+     * @param x X coordinate.
+     * @param y Y coordinate.
+     * @return Pixel index.
+     */
+    @Deprecated
+    public int getPixelIndex(int x, int y) {
+        return firstPixel + y * fullLine + x;
+    }
 }
