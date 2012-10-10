@@ -53,7 +53,7 @@ public final class ImgUtil {
         int p = image.firstPixel;
         for (int y = 0; y < image.height; y++) {
             for (int x = 0; x < image.width; x++) {
-                int i = (int) image.pixels[p] & 255 / (255 / pseudo.length);
+                int i = ((int) image.pixels[p] & 255) / (255 / pseudo.length);
                 if (i < 0) {
                     i = 0;
                 }
